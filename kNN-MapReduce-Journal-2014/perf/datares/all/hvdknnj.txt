@@ -1,0 +1,7 @@
+#data;#time(ms)#timeHumain
+50;181264;1;0h3min1sec;
+100;226158;1;0h3min46sec;
+200;452671;1;0h7min32sec;
+400;2023356;1;0h33min43sec;
+800;6881818;1;1h54min41sec;
+1600;33127513;1;9h12min7sec;

@@ -1,0 +1,154 @@
+\input{parts/tab.tex}
+\subsection{Global Complexity}
+\label{section:global_complexity}
+%\TODO{T2----Totally changed, need to be checked}
+The overall performance of any kNN algorithm in MapReduce depends on multiple factors. We will now describe them 
+and outline how they can impact the execution time.  
+\begin{itemize}
+
+\item[(1)] \textbf{The number of MapReduce jobs:} Starting a job (whether in 
+Hadoop\cite{Jiang:2010:PMI:1920841.1920903} or any other platform) requires some initialization steps 
+such as allocating resources and copying data. Those steps can be very time 
+consuming.
+
+\item[(2)] \textbf{The number of Map tasks and Reduce tasks used to calculate kNN$\left(R_i \ltimes S\right)$:} The larger this number is, the more 
+information is exchanged through the network during the Shuffle phase. 
+Moreover, scheduling a task also incurs an overhead. But the smaller this number is, the more computation is done by one machine.
+
+\item[(3)] \textbf{The number of final candidates for each object $r_i$:} %Sorting is a computational intensive operation, so the number of elements to be 
+%sorted also impacts computation time. 
+In fact, like the indexes method used in non-parallel methods to avoid the scan of the whole dataset,  the technologies of pre-processing and partitioning used by each parallel method and the counterbalance of using multiple jobs are all in order to reduce the proportion of replicated data, thereby reducing the impact of this number on the final computation time. 
+
+
+
+\end{itemize} 
+
+%Here, we analyze the previously described systems 
+
+Together these three points impact two main overheads that affect the performance:
+\begin{itemize}
+\item Communication overhead, which can be considered as the amount of data transmitted over the network during the 
+Shuffle phase. %This value is controlled by (1), (2) and (3).
+
+\item Computation overhead, %which is the CPU overhead used to calculate by each task. This overhead 
+is mainly composed by two parts, 1). computing the distances 2). finding the $k$ smallest distances. It is also 
+impacted by the  complexity (dimension) of the data.
+\end{itemize}
+
+Suppose the dataset is $d$ dimensional, the overhead for computing the distance is roughly the same for every $r_i$ and $s_j$ for each method. The difference comes from the number of distance to sort for each element $r_i$ to get the top k nearest neighbors. Suppose that the dataset R is divided into $n$ splits. Here $n$ represents the number of partitions of R and S for H-BNLJ and H-zkNNJ, the number of cells after using the grouping strategy for PGBJ and the number of buckets for RankReduce. %the number of tasks can be represented by $n$.
+
+Assuming there is a good load balance for each method, the number of elements in one split $R_i$ can be 
+considered as $\frac{\left|R\right|}{n}$. Finding the $k$ closest neighbors for a given $r_i$ can be done using 
+a priority queue at a lower cost than a complete sort of all candidates. 
+%\sout{The total sort complexity for one task is: 
+%$\left|R_i\right| \cdot \mathcal{O}(sort \  r_i)$ = $\frac{\left|R\right|}{n} \cdot \mathcal{O}(sort \ r_i)$. The 
+%difference comes from the complexity of sort for one $r_i$, which is the number of distances need to be sorted for one 
+%$r_i$. In order to improve the efficiency of sort, we use a priority queue for each $r_i$ to select the top k nearest 
+%neighbor in each method.}
+
+%Here we go through the details for each methods.
+
+The basic method H-BkNNJ only uses one MapReduce job, and requires  
+only one Reduce task to compute and sort the distances. The communication overhead is $\mathcal{O} 
+(\left|R\right|+\left|S\right|)$. The number of final candidates for one $r_i$ is $|S|$. The complexity of finding the 
+$k$ smallest distances for $r_i$ is $\mathcal{O}(
+\left|S\right| \cdot log\left(k\right))$. Hence, the total cost for one task is $\mathcal{O}(\left|R\right| 
+\cdot \left|S\right| \cdot \log\left(k\right))$. Since $R$ and $S$ are usually large 
+dataset, this method quickly becomes impracticable.
+
+To overcome this limitation, H-BNLJ  \cite{Zhang:2012:EPK:2247596.2247602} uses two MapReduce jobs, with $n^2$  tasks 
+to compute the distances. Using a second  job significantly reduces the number of final candidates to $nk$. 
+The total communication overhead is $\mathcal{O}(n\left|R\right|+n\left|S\right|+kn\left|R\right|)$. The 
+complexity of finding the $k$ elements for each $r_i$ is reduced to $\left(n \cdot k
+\right) \cdot log\left(k\right)$. Since each task has $\frac{\left|R\right|}{n}$ elements, the total sort overhead for 
+one task is $\mathcal{O}(\left|R\right| \cdot k \cdot log(k))$.
+
+PGBJ\cite{Lu:2012:EPK:2336664.2336674} performs a preprocessing phase followed by two MapReduce jobs. This method also 
+only uses $n$ Map tasks to compute the distances and the number of final candidates falls to $|S_i|$. 
+\TODOREP{this $|S_i|$ equals to number of data of all cells of group i. Additionally, the data S of the others cells which have to replicate inside it}
+Overall, finding
+the $k$ elements is reduced to $\mathcal{O}(\left|S_i\right| \cdot log\left|k\right|)$ for each $r_i$, and 
+$\mathcal{O}(\frac{\left|R\right|}{n} \cdot \left|S_i\right| \cdot log\left|S_i\right|)$ in total per task. The 
+communication overhead is $\mathcal{O}(\left|R\right| + \left|S\right| + \left|RepS_c\right|\cdot n)$. In the original 
+paper the authors gives a formulation for calculating $\left|RepS_c\right|\cdot n$ which is called the number of 
+replicas of objects in $S$ represented by $RP(S)$.\TODO{What is RP(S)?} %, and the authors gives a formulation for 
+%calculating this 
+%number. 
+
+In RankReduce \cite{Stupar10rankreduce-}, the initial dataset is projected by $L$ hash functions families into buckets.
+ Each bucket contains a piece of $R$ and a piece of $S$.  
+After finding the local candidates by the second job, the third job needs to combines the local results in order to 
+find the global k nearest neighbor. For each $r_i$, the number of final candidates is $L\cdot k$. Finding the $k$ 
+elements takes $\mathcal{O}(L \cdot k \cdot log(k))$ per $r_i$, and $\mathcal{O}(|R_i| \cdot L \cdot k \cdot log(k))$ 
+per task. The total communication cost becomes $\mathcal{O}(L \cdot (|R|+|S|)+L\cdot k\cdot |R|)$.
+
+%In RankReduce\cite{Stupar10rankreduce-}, $L$ copies of initial dataset are created to project them inside a bucket.
+%Each bucket $i$ has $R_i$ and $S_i$ elements and by consequence the sorting complexity is $|R_i|\cdot|S_i| \cdot log(k)$. The buckets are not equals and their size depends from parameter $W$ of hash function \TODO{ce qu on peut voir apres ds les perfs...} and the data distribution in the space. The output of the phase 2, phase to get the knn for each copy of $R$, is  $k*L$ elements for each $r$. The phase 3 sorts them to get the number of $k$ wanted. Its sorting complexity is $|R|\cdot L \cdot k \cdot log(k)$.
+%The comunication overhead is determined by the number objet between the map and the reducer
+%For phase2 it equals to $|L| \cdot (|S|+|R|)$. For phase3, it equals to $|L|\cdot|R|\cdot k$
+
+
+H-zkNNJ\cite{Zhang:2012:EPK:2247596.2247602} also begins by a preprocessing phase and uses in total three MapReduce 
+jobs in exchange for requiring only $n$ Map tasks to compute the distances. For a given $r_i$, these tasks 
+process elements from the candidate neighbor set, $C_i\left(r_i\right)$. By construction, $C_i\left(r_i\right)$ only 
+contains  $2k$ neighbors, hence the number of final candidates for $\alpha$ data shifts becomes $2 \cdot \alpha \cdot 
+k$. The complexity is now reduced to $\mathcal{O}(\left(2 \cdot k\right) \cdot log\left(k\right))$ for one shift, 
+and $\mathcal{O}(\frac{\left|R\right|}{n} \cdot \left(2 \cdot \alpha \cdot k\right) \cdot log\left(k\right))$ in total 
+per task for $\alpha$ shifts. The communication overhead is 
+$\mathcal{O}(\frac{1}{\varepsilon^2}+\left|S\right|+k \cdot \left|R\right|)$, with $\varepsilon \in ]0, 1[$.
+%
+%\vspace{0.5em}
+%\TODO{pas fini}
+%\TODOREP{Another aspect where we can compare this different algorithm is about the phase to find $KNN$ candidates called $MR1$, the first map round. For the algorithms that don't include a phase of $KNN$ candidate like $HBKNNJ$ or $PGBJ$, it represents the phase final. Comparing specially the cpu of this phase  is very interresting. Indeed, it is the phase which has the more impact on the whole of job. Moreover it gives an idea for the futur : if another work wants to fit in this phase with the others like the Fig 4 shows the possibility. The main goal of this phase is to cut the amount of work by bucket/partitions/cases... called cutting. Each cutting can run in parrallel. If the algorithm gives a perfect load balancing, we can determine $|R_i|$ and $|S_i|$ by $|R|/n$ and $|S|/n$ where n is the number of cutting.
+%In HBKNNJ, none cutting is made and the complexity is quadratic with whole of data: $|R|*|S|*log(k)$. In HBNLJ, we reduce this complexity : each cutting has a chunk of dataset. But the complexity stays quadratic and the amount of chunck data per cutting can be important: $|R|*|S|/(n^2)*log(k)$.
+%In PGBJ n represent the number of grouping. Each group has a number $M$ of neighbours cell. In the best case, the data of $R$ for one cell searches its $knn$ in its own cell. In worst case, it searches in all neighbours cells of grouping. But a previous sort inside the grouping is made to avoid this possibility and searchs only in a little number of cells. Here, $M/m$ represents this number of cells in $S_i$ where one cell for the dataset R, called  $P_i^R$, lookup its $knn$. This number $m$ , is smaller or equals to $M$. The complexity equals to $\sum_i^M (|P_i^R|* \sum^m |P_m^S|)$
+%In RankReduce n represents the number of reducer. the load balancing allows to have some reducer with same complexity. Each reducer include a number $B$ of bucket. And we can conclude to have a number of buckets important but small size, no a lot of data inside it, implies a cost cpu weak : $\sum_i^B (|S_i|*|R_i|)$
+%This small size is determined by the parameter $W$ of hash function explained previously.
+%In Zvalue, the partition implies first of all the cration of binary tree and then it applies the binary search on the dataset. the complexity becomes linear.
+%In summary, this phase show thanks to different algorithms, the possibility to reduce  the computing of $knn$ from a complexity quadratic in a complexity linear by the different methods.
+%Moreover, it allows to understand how user can reduce himself the complexity by the choice of its parameter and the impact of this parameter on the time... ... 
+%Fnally, It gives a order of comparaison : for example if their cutting is equals $HBKNN > HBNLJ > PGBJ > LSH >ZVALUE$}
+%\TODO{end pas fini}
+
+From the above analysis we can see: H-BkNNJ only uses one task, but this task needs to calculate the entire data set. 
+H-BNLJ uses $n^2$ tasks to greatly reduce the amount of data processed by each task. However this greatly increases the 
+amount of data to be exchanged among the nodes of a cluster. This proves to be a major bottleneck. 
+PGBJ, RankReduce and H-zkNNJ all use three jobs which reduces the number of tasks to $n$. Also, each task 
+has almost the same amount of data to process as each task in H-BNLJ %\TODO{You mean a task of H-BNLJ? }. 
+From this, we can 
+see three categories for performance. H-BkNNJ should be the least efficient, followed by H-BNLJ. PGBJ, RankReduce and 
+H-zkNNJ are theoretically more efficient. 
+Moreover, the dimension of data can also impact the running time because of the curse of 
+dimensionality. H-zkNNJ reduces the dimension of data to $1$ which should greatly speed-up the computation 
+distances. 
+
+\TODOREP{For the runtime of first map round (the search of candidate for H-zKNNJ,LSH, and HBNLJ  and the final job for HBKNNJ and PGBJ), the different algorithm proceed differently to compute the  $knn$. 
+LSH, HBNLJ and HBKNNJ compute of the same way. For each element r of dataset R in a partition/bucket/cell $i$. it searches in all the dataset S. The complexity of computing became quadratic $|R_i|*|S_i|*log(k)$. It's the size of the partition/bucket that differs. Therefore, for LSH, we wish some buckets more small despite of the number important of buckets generated. \\
+For PGBJ and H-zKNNJ, the computing differer. Indeed PGBJ sorts its cells of grouping to avoid to search in all the dataset S thanks to a threshold. But the computing stay the same. It just the bound that changes. For H-zKNNJ, the space-filling curve introduces a dimensionality one where  H-zKNNJ creates a binary search to extract only $2*k$ element to compute $knn$. The computing is the more speed thanks to its complexity : $|R|*2*k*log(k)$. }
+
+Carefully balancing the number of jobs, tasks, computation and communication 
+is an important part of designing an efficient distributed algorithm.\TODO{this sentence needs to be written And should 
+be the conclusion of this section}.
+We will further verify the efficiency of each method through experiments in Section 5.
+
+Since we have analyzed these 3 important factors that affect the performance of each algorithm, we may have some 
+questions like:
+\begin{itemize}
+\item Is it possible to find a tradeoff among these three factors to minimize the total processing time of each method?
+
+\item Is it possible to find a formula about the overall complexity represented by these three factors.
+\end{itemize}
+
+Unfortunately, the answers are no. Because, firstly, in real applications, the distribution of data also plays 
+tremendous impacts on the running time of each method, and this impact can not be qualified analysis; Then, the overall 
+complexity is not a simple combination of these three factors. For example, to reduce the number of the candidates for 
+the final sorts, H-BNLJ, RankReduce and H-zkNNJ choose to pre-sort the local candidates in there previous MapReduce 
+job, and the total complexity should also consider about the complexity for this process.\TODOREP{for me this sentence 
+is incorrect, we doesn't sort, we classify the data by indexing or just by cutting the dataset... But definitively 
+it'snt a sort} At the same time, the time spent for finding pivots for PGBJ, for hashing in RankReduce and for 
+calculating z-value in H-zkNNJ as long as their partition time should also be considered; Finally, the number of nodes 
+in the cluster, the capacity of each nodes and the communication among nodes can also affect the performance of each 
+method.
+\TODOREP{Ce paragraphe ca va pas }
+
+We need to remind the readers that the overall complexity is not the summation or a simple combination of the complexity of each part. And the total processing time can not be predicated by theoretical analysis, which makes it more important to have an experimental study.

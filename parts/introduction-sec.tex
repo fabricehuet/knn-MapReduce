@@ -1,0 +1,55 @@
+\section{Introduction}
+Given a set of query points $R$ and a set of reference points $S$, a $k$ nearest neighbor join (hereafter kNN) is an operation which, for each point in $R$, discovers 
+the $k$ nearest neighbors in $S$. It is frequently used as a classification or clustering method in machine learning or data mining.  It can be applied to 
+a large number of fields, such as multimedia \cite{knn_video_matting_iccv2013} \cite{Kriegel:1998:ASS:594718.594761}, social network \cite{Bai:
+2011:CPT:2043652.2043659}, time series analysis \cite{Rafiei:1997:SQT:253262.253264} \cite{Agrawal:1993:ESS:645415.652239}, bio-information and medical 
+imagery \cite{5930107} \cite{Korn:1996:FNN:645922.673493}. 
+
+
+The basic idea to compute a kNN is to perform  a pairwise computation of distance for each element in $R$ and each element in $S$. The computational 
+complexity of this pairwise calculation is $O(\left|R\right| \times \left| S \right|)$. Then, finding the $k$ nearest neighbors in $S$ for every $r$ in $R$ 
+boils down to sorting the computed distances, and leads to a complexity of at least $\left| S \right| \times log \left| S \right|$. As the amount of data 
+or their complexity (number of dimensions) increases, this approach becomes impractical. This is why a lot of work has been dedicated to reducing the kNN 
+computational 
+complexity \cite{DBLP:journals/tods/JagadishOTYZ05} \cite{MuX} \cite{Ciaccia:1997:MEA:645923.671005} \cite{DBLP:journals/geoinformatica/YuZHX10} 
+\cite{Bentley:1975:MBS:361002.361007}. %These improvements work at different stage of the kNN computation, such as: data indexing and execution model.
+
+%Here are the different stage that can be studied and optimized in a kNN computation:
+
+%\begin{itemize}
+
+%\item Data Preprocessing
+%\item Data organization
+%\item Execution model
+
+%\end{itemize}
+
+Although a variety of previous work has greatly improved its performance, there are still significant limitations to process kNN on a single machine when the amount of data increases. For large dataset, only distributed and parallel solutions prove to be powerful enough. 
+MapReduce is a flexible and scalable parallel and distributed programming paradigm which is especially designed for data-intensive processing. It was first 
+introduced by Google \cite{Dean:2008:MSD:1327452.1327492} and popularized with the Hadoop\cite{Hadoop:Website} framework, an open source 
+implementation. MapReduce offers a programming model adapted to large scale data processing, which can easily be distributed. The framework can be 
+installed on commodity hardware and automatically distribute a MapReduce job over a set of machines. Therefore, it seems to be a good target for 
+computing kNN in a distributed way. However, writing an efficient kNN in MapReduce is challenging. First, classical algorithms have to be redesigned
+to fit the MapReduce programming model.  Second, data partition and distribution strategies have to be carefully designed to limit 
+communications and data transfer. 
+In this paper, we review existing implementations of kNN in MapReduce, focusing on different steps involved in a computation. 
+Other surveys about kNN have been conducted, such as \cite{SurveyNNTechniques,Jiang:2007:SIK:1302500.1303257}. In \cite{SurveyNNTechniques}, the authors 
+only focus on centralized solutions to optimize kNN computation whereas we target distributed solutions. In \cite{Jiang:2007:SIK:1302500.1303257}, the 
+survey is also oriented towards centralized techniques and is based on a theoretical performance analysis. Our approach is much more high level, though we 
+also provide some details about the performance of the works we study. 
+Overall, our contributions are:
+\begin{itemize}
+\item The decomposition of a distributed kNN computation in different steps.
+\item An analysis of existing techniques for each step based on load balancing, accuracy and complexity.
+\item A global comparison which can be used to find the most suitable solution for a given use case.
+\end{itemize}
+
+%In our paper, we will study the methods of processing kNN on top of MapReduce in many aspects, such as the workflow including the pre-processing, the data organization and the execution model. 
+%We also give some theoretical analysis about the accuracy, the complexity and the dynamicity of the method. 
+The rest of the paper is organized as follows. Section II introduces the background about kNN and MapReduce. Section III presents the 3 stages of
+workflow involved in computing kNN on MapReduce. Section IV analyzes existing implementations from the following points of view: load balancing, accuracy and complexity. Finally,
+Section V concludes this work.
+
+%the partitioning strategies, the comparison with some non-MapReduce methods, the analysis about the danamicity and accuracy. The rest of the paper is organized as following: Section II introduces the background about kNN join and MapReduce. Section III analyze the methods of processing kNN on top of MapReduce in 4 aspects. Section IV describes a conclusion.
+
+

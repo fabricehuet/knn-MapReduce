@@ -1,0 +1,75 @@
+\subsection{Dynamicity}
+So far, all the solutions we have studied did not take into account potential changes in the dataset: they are designed for static computation of kNN. 
+However, in real applications, it is likely to have to recompute the kNN against an updated set $R$ (new queries) or an updated set $S$ (new database), 
+or even in some cases with both updated sets. A fair number of works have been devoted to efficiently handling updates in the datasets $R$ and $S$ 
+\cite{bohm2007efficiently,DBLP:journals/geoinformatica/YuZHX10}, but only in a centralized context.  
+
+%On the other hand, the MapReduce model is not naturally  suited to dynamic data, as a reducer needs all the values of a given key to complete its 
+%computation. Hence data modification during a job execution is not supported.  Some support for changing datasets between jobs \cite{vu:hal-00916103,Bu:2010:HEI:1920841.1920881} has been proposed, but there still remains the challenge of efficiently implementing kNN with such constraints. 
+
+Indeed, we have seen that efficient solutions for computing kNN on MapReduce require a fine partitioning of the data. Consequently, to handle data updates 
+efficiently, one should avoid repartitioning the dataset at each update as it is a heavy step. However, the partitioning step is often driven by the data 
+itself.
+This is why it is important, when choosing a solution, to know if the whole partitioning is driven by the partitioning of the $R$ dataset or of the $S$ 
+dataset. 
+For example, if the partitioning is driven by the partitioning of $R$ as in \cite{Zhang:2012:EPK:2247596.2247602,Lu:2012:EPK:2336664.2336674}, then having 
+new queries will force to retrigger the whole partitioning process (and potentially the preprocessing of data too) from the beginning. An application that 
+frequently receives new data will probably not benefit from this technique.
+On the other hand, if the updates are located in the reference set $S$, the partitioning can be kept unchanged for several successive updates.
+%\TODO{is there an example of framework partitioning on $S$? - NO! -}
+
+% But in this 
+%case, the partitions will inevitably reach a critical size at some point, and computing the kNN will be unfeasible because the issues are then the same as 
+%in centralized solutions.  
+To the best of our knowledge, up to now, there is no dominating solutions for processing continuous kNN join on top of MapReduce.
+
+
+% CONTINUOUS KNN 
+%To the best of our knowledge, there is no continuous method to process kNN join on top of MapReduce. Meanwhile, many works dedicate to make Hadoop work 
+%in a continuous way so that it can deal with dynamic data. cHadoop \cite{vu:hal-00916103} provides a "carry" part after Reduce phase to store the 
+%intermediate data or result. Some of the already existed methods can be modified to work on this continuous version of Hadoop.
+%
+%Take H-BkNNJ as an example, if there comes some new data in $R$ or in $S$, we only want to process the new ones, and add the result to the previous one. 
+%Shown in figure \ref{kNN_CMT}
+%
+%\begin{figure}[!htb]
+%Map  Task  at  $t_0$:
+%
+%\begin{align*}
+%R &\rightarrow &R_{1} & & S &\rightarrow &S_{1}\\
+%& & R_2 & & & & S_2\\
+%& & R_3 & & & & S_3\\
+%& & ... & & & & ...\\
+%& & R_n & & & & S_n\\
+%\end{align*}
+%
+%\textcolor{red}{New Map Task at $t_1$:
+%\begin{align*}
+%& & & &\Delta R_{n+1} & & & & &\Delta S_{n+1}
+%\end{align*}
+%}
+%\caption{kNN in Continous MapReduce: Map Task \label{kNN_CMT}}
+%\end{figure}
+%
+%So if we only consider these new coming data, we have some new partitions as shown in figure \ref{kNN_CMO}
+%
+%\begin{figure}[!htb]
+%New Map Output:
+%\textcolor{red}{\begin{center}
+%(\(R\sb{1}\), \(S\sb{n+1}\))\\
+%(\(R\sb{2}\), \(S\sb{n+1}\))\\
+%  ...\\
+%(\(R\sb{n}\), \(S\sb{n+1}\))\\
+%(\(R\sb{n+1}\), \(S\sb{1}\))\\
+%(\(R\sb{n+1}\), \(S\sb{2}\))\\
+%  ...\\
+%(\(R\sb{n+1}\), \(S\sb{n}\))\\
+%(\(R\sb{n+1}\), \(S\sb{n+1}\))\\
+%\end{center}}
+%\caption{kNN in Continous MapReduce: Map Output \label{kNN_CMO}}
+%\end{figure}
+%
+%To make it work in a continuous way, we need to store the result of the previous Reduce Task 1.
+%And we also send these new partitions to the first reduce task, and add the results to the previous ones. So at the end of the first reduce task, we 
+%can get a new list in form of $(r_{id}, s_{id}, d(r,s))$. Then sort this list in reduce task 2 and get the new result of the $k$ nearest neighbor for 
+%every element $r$ in $R$ from $S$.

@@ -1,0 +1,52 @@
+\section{Analysis}
+%In this section, we analyze existing works from another point of view than the workflow they follow. We first analyze load balancing to figure 
+%out the impact of the partitioning strategy. We then point out solutions that produce an exact result from solutions that produce an approximate 
+%result, in order to complete faster. We also compare the expected complexity of the systems. Finally, we consider the problem of changes in 
+%the dataset (either in $R$ or $S$) and the challenges it raises. 
+\begin{table*}[htp]
+  \centering
+\begin{tabular}{ | c | c | c | c | c | c | c | c | }
+
+    \hline
+    & & & & & \multicolumn{2}{ c |}{} & \\ 
+    \textbf{Systems} & \textbf{Preprocessing} & \textbf{Partitioning} & \textbf{Total jobs} & \textbf{Accuracy} & \multicolumn{2}{ c |}{\textbf{Complexity}} & \textbf{Dynamicity} \\
+    \cline{6-7}  
+    & & & & & & & \\
+    & & & & & \textbf{Tasks} & \textbf{Sort} & \\ \hline
+      
+	H-BkNNJ & None & None & 1 & Exact & $n$\textsuperscript{2} & $\left|S\right| \times log\left|S\right|$ & Static \\ 
+    (basic) & & & & & & & \\ \hline  
+    
+    H-BNLJ \cite{Zhang:2012:EPK:2247596.2247602} & None & Size based & 2 & Exact & $n$\textsuperscript{2} & $\left|n \cdot k\right| \times log\left|n \cdot k\right|$   & Static \\
+    (Zhang et al.) & & & & & & & \\ \hline
+    
+    RankReduce \cite{Stupar10rankreduce-} & LSH & Size based & 2 & Approximate & $n$ & $\left|n \cdot k\right| \times log\left|n \cdot k\right|$ & Static \\ 
+    (Stupar et al.) & & & & & & &\\ \hline
+       
+    PGBJ \cite{Lu:2012:EPK:2336664.2336674} & Pivots & Distance based & 2 & Exact & $n$ & $\left|S_i\right| \times log\left|S_i\right|$ & Static \\ 
+    (Lu et al.) & selection & (Voronoi Diagram) & & & & &\\ \hline
+    
+    H-zkNNJ \cite{Zhang:2012:EPK:2247596.2247602} & $Z$-curve & Size based & 3 & Approximate & $n$ & $\left|2 \cdot k\right| \times log\left|2 \cdot k\right|$ & Static \\ 
+    (Zhang et al.) & & & & & & &\\ \hline
+    
+%    \textit{z}\textsuperscript{\raisebox{2pt}{$\chi$}}-kNN \cite{5447837} & Space-filling curve technique & Relational & Batch-oriented & Approximate\\ 
+%    (Yao et al.) & (z-order curve) & & & \\ \hline
+    
+%    in-place fixed-radius NN \cite{Andreica13sequentialand} & Indexing technique  & MapReduce & Static & Exact\\ 
+%    (Andreica et al.) & (quad-tree cells) & & & \\ \hline
+    
+%    kNNJoin\textsuperscript{+} \cite{Yu:2010:HKJ:1713160.1713227} & Indexing technique & Shared memory & Batch-oriented & Exact\\ 
+%    (Yu et al.) & (Sphere-tree) & based & & \\ \hline
+%    
+%    Sphere VA-file \cite{bohm2007efficiently} & Indexing technique  & Shared memory & Stream & Exact\\ 
+%    (Bohm et al.) & (grid based on queries) & based & & \\ \hline
+%    
+%    M-Chord \cite{Novak:2006:MSD:1146847.1146866} & Indexing technique  & Distributed & Static & Exact\\ 
+%    (Novak et al.) & (iDistance) + Partitioning & & & \\
+%    & based on Voronoi diagrams & & & \\ \hline
+    
+  \end{tabular}
+  
+  %\end{center}
+\caption{Summary table of kNN computing systems with MapReduce}\label{summary_table} 
+\end{table*}

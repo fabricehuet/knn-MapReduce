@@ -1,0 +1,13 @@
+
+MODE=OSM
+NBKNN=20
+
+SHIFT=3
+P=20
+SCALE=1000
+E=0.003
+NBREDUCER=56
+
+file = 250000
+
+on change K

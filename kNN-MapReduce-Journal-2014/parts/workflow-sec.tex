@@ -1,0 +1,5 @@
+\section{Workflow}\label{workflowsec}
+%In this section, we introduce the algorithms from the perspective of workflow. We divide these algorithms into three steps: (i) data pre-processing, (ii) data partitioning and (iii) kNN computation. The algorithms mentioned in this section are: 
+We first introduce the reference algorithms that compute kNN over MapReduce. They are divided into two categories: (1) Exact solutions:  The basic kNN method called hereafter \textbf{H-BkNNJ}; The block nested loop kNN named \textbf{H-BNLJ} \cite{Zhang:2012:EPK:2247596.2247602}; A kNN based on Voronoi diagrams named \textbf{PGBJ} \cite{Lu:2012:EPK:2336664.2336674} and (2) Approximate solutions:  A kNN based on $z$-value (a space filling curve method) named \textbf{H-zkNNJ} \cite{Zhang:2012:EPK:2247596.2247602};  A kNN based on LSH, named \textbf{RankReduce} \cite{Stupar10rankreduce-}.
+
+Although based on different methods, all of these solutions follow a common workflow which consists in three ordered steps: (i) data preprocessing, (ii) data partitioning and (iii) kNN computation. We analyze these three steps in the following sections.

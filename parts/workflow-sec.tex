@@ -1,0 +1,29 @@
+\section{Workflow}
+In this section, we review the methods that have been used to perform kNN join on MapReduce. Overall, they all share the same 
+workflow, comprised of three stages: (i)~data preprocessing (ii)~data partitioning and organization 
+and (iii)~computation of kNN. We will focus on the 
+following works: the initial (basic, not optimized) idea, which we 
+call H-BkNNJ 
+%\TODO{why this name? --B stands for basic--}
+, and its improvements H-BNLJ (Block Nested Loop Join) and H-BRJ (Block Nested R-Tree Join) in \cite{Zhang:2012:EPK:2247596.2247602}, as well as more advanced 
+solutions such as 
+H-$z$kNNJ (z-value) in \cite{Zhang:2012:EPK:2247596.2247602}, RankReduce (Locality Sensitive Hashing) in \cite{Stupar10rankreduce-} and PGBJ (Voronoi) in \cite{Lu:2012:EPK:
+2336664.2336674}. 
+
+%\TODO{Check/rewrite --checked--}
+
+%
+%these two methods do not need any pre-processing or data organization 
+%strategies. Additional, some advanced methods which invoke some pre-processing and data organization strategies such as H-
+%zkNNJ \cite{Zhang:2012:EPK:2247596.2247602} and H-VDkNNJ \cite{Lu:2012:EPK:2336664.2336674} will also be presented.
+
+%<<<<<<< .mine
+
+% =======
+%We review here the methods that have been used to perform kNN join on MapReduce. Here we mainly present the methods below: the basic idea (which we 
+%call H-BkNNJ) and its improvement H-BNLJ \cite{Zhang:2012:EPK:2247596.2247602}, these two methods do not need any pre-processing or data organization 
+%strategies. Additional, some advanced methods which invoke some pre-processing and data organization strategies such as H-zkNNJ \cite{Zhang:2012:EPK:
+%2247596.2247602} and H-VDkNNJ \cite{Lu:2012:EPK:2336664.2336674} will also be presented.
+%
+%Totally, to process these methods on MapReduce we need 3 stages: (i) Data Pre-Processing (ii) Data Organization and (iii) Execution. We will present 
+%these stages separately.>>>>>>> .r2824

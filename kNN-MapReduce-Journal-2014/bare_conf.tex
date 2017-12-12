@@ -1,0 +1,103 @@
+\documentclass{IEEEtran}
+\usepackage{graphicx}
+\usepackage{balance}  % for  \balance command ON LAST PAGE  (only there!)
+\usepackage{enumitem}
+\newtheorem{myDef}{Definition}
+\newtheorem{myTheo}{Theorem}
+
+\usepackage[usenames,dvipsnames]{xcolor}
+
+\newcommand{\TODO}[1]{\textcolor{red}{\textbf{[TODO:#1]}}}
+\newcommand{\TODOREP}[1]{\textcolor{ForestGreen}{\textbf{[TODO:#1]}}}
+
+% *** CITATION PACKAGES ***
+%
+\usepackage{cite}
+\usepackage{lscape}
+\usepackage{color}
+
+% *** sub***
+%
+\usepackage{caption}
+\usepackage{subcaption}
+
+\usepackage{multirow}
+
+
+% *** MATH PACKAGES ***
+%
+%\usepackage[cmex10]{amsmath}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{algorithmic}
+\usepackage{array}
+\usepackage{mdwmath}
+\usepackage{mdwtab}
+\usepackage{eqparbox}
+\usepackage{caption}
+\setlength\abovecaptionskip{1mm}
+\setlength\belowcaptionskip{0mm}
+\setlength{\textfloatsep}{5pt}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{boxedminipage}
+\usepackage{mwe} % new package from Martin scharrer
+\usepackage{authblk}
+
+%\setlength{\topskip}{0pt}
+\setlength{\topsep}{2pt}
+
+
+\usepackage[normalem]{ulem}
+
+\begin{document}
+
+% ****************** TITLE ****************************************
+
+\title{K Nearest Neighbour Joins for Big Data on MapReduce: a Theoretical and Experimental Analysis \newline [Experiments and Analysis Paper]}
+
+% possible, but not really needed or used for PVLDB:
+%\subtitle{[Extended Abstract]
+%\titlenote{A full version of this paper is available as\textit{Author's Guide to Preparing ACM SIG Proceedings Using \LaTeX$2_\epsilon$\ and BibTeX} at \texttt{www.acm.org/eaddress.htm}}}
+
+% author names and affiliations
+% use a multiple column layout for up to two different
+% affiliations
+
+
+\author[1,2]{\large Ge Song}
+\author[1]{\large Justine Rochas}
+\author[1]{\large Lea El Beze}
+\author[1]{\large Fabrice Huet}
+\author[2]{\large Frederic Magoules}
+\affil[1]{Univ. Nice Sophia Antipolis, CNRS, I3S, UMR 7271, France \authorcr \url{justine.rochas, fabrice.huet}@unice.fr \  \url{lea.elbeze}@gmail.com} 
+\affil[2]{Ecole Centrale Paris, France \authorcr \url{ge.song, frederic.magoules}@ecp.fr}
+
+
+
+
+\maketitle
+
+\input{parts/abstract.tex}
+\input{parts/introduction-sec.tex}
+\input{parts/preliminaries-sec.tex}
+\input{parts/workflow-sec.tex}
+\input{parts/data-preprocessing-subsec.tex}
+\input{parts/data-organization-subsec.tex}
+\input{parts/execution-model-subsec.tex}
+%\input{parts/workflow-summary-subsec.tex}
+\input{parts/new_workflow_summary.tex}
+%\input{parts/analysis-sec.tex}
+\input{parts/accuracy-subsec.tex}
+\input{parts/complexity-subsec.tex}
+%\input{parts/updates-subsec.tex}
+\input{parts/analysis-summary-subsec.tex}
+\input{parts/experience.tex}
+%\input{parts/amelioration}
+\input{parts/conclusion.tex}
+%\input{parts/experience_img.tex}
+
+\bibliographystyle{IEEEtran}
+\bibliography{mybib}
+
+\end{document}

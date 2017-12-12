@@ -1,0 +1,20 @@
+TIMETOTAL=295203
+TIME_HUMAIN=0h4min55sec
+KNN=20
+inputLineS=112984
+inputLineR=2400
+outputRes=0
+outputWanted=48000
+ratioRes=0.0
+#BucketInitial=230759
+#BucketFinal=461518
+JOB1=117879;115384;230768;60509534;461518;461518
+JOB2=99512;461518;461518;60713335;461518;0
+JOB3=29411;0;0;0;0;0
+JOB4=48401;0;0;656;0;0
+----------------------------------------------
+SUMMARY : 
+TIMETOTAL;ratioRes;BucketInitial;BucketFinal;TIMEHUMAIN
+295203;0.0;230759;461518;0h4min55sec
+
+----------------------------------------------

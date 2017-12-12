@@ -1,0 +1,198 @@
+\section{Theoretical Analysis}\label{analysis}
+\label{sec:analysis}
+\subsection{Load Balance}
+\label{sec:load_balance}
+%MapReduce is a parallel and shared-nothing platforme.In Map Phase or Reduce Phase, each task will be done in parallel, so the computation time depends on the completion time of the longest task. 
+In a MapReduce job, the Map tasks or the Reduce tasks will be processed in parallel, so the 
+overall computation time of each phase depends on the completion time of the longest task. 
+Therefore, in order to obtain the best performance, it is important that each task performs 
+substantially the same amount of computation.  When considering load balancing in this section, we 
+mainly want to have the same time complexity in each task. Ideally, we want to calculate roughly 
+the same number of distance between $r_i$ and $s_j$ in each task.
+
+For \HBK, there is no load balancing problem. Because in this basic method, only the Map Phase is treated in parallel. In Hadoop each task will process 64M data by default.
+
+\HBNLJ~ cuts both the dataset $R$ and the dataset $S$ into $p$ equal-size pieces, then those pieces are 
+combined pairwise to form a partition of $<R_i, S_j>$. Each task will process one block of data 
+so we need to ensure that the size of the data block handled by each task is roughly the 
+same. However, \HBNLJ~ uses a random partitioning method which can not exactly divide 
+the data into equal-size blocks. 
+
+\VO~ uses Voronoi diagram to cut the data space of $R$ into cells, where each cell is represented 
+by its pivot. Then the data are assigned to the cell whose pivot is the nearest from it. For each 
+$R$ cell, we need to find the corresponding pieces of data in $S$. Sometimes, the data in $S$ may be 
+potentially needed by more than one $R$ cells, which will lead to the duplication of some 
+elements of $S$. Thus the number of distances to be calculated in each task, i.e. the relative time 
+complexity of each task is:
+\begin{center}
+$\mathcal{O}\left(Task\right)$ = $\left|P_i^R\right| \times \left(\left|P_i^S\right| + \left|RepS_c\right| \right)$
+\end{center}
+where $\left|P_i^R\right|$ and $\left|P_i^S\right|$ represents the number of elements in cell $P_i^R$ or 
+$P_i^S$ respectively, and $\left|RepS_c\right|$ the number of replicated elements for the cell. 
+Therefore, to ensure load balancing, we need to ensure that $\mathcal{O}\left(Task\right)$ is roughly the 
+same for each task.
+\VO~ introduces two methods to group the cells together to form a bigger cell which is the 
+input of a task. \label{pgbj_grouping}
+On one hand, the \emph{geo grouping} method supposes that close cells have a higher probability to 
+replicate the same data. On the other hand, 
+the \emph{greedy grouping} method estimates the cells whose data are more likely to be replicated. This approximation gives an upper bound on 
+the complexity of the computation for a particular cell, which enables grouping of the cells that have the most replicated data in 
+common. This leads to a minimization of replication and leads to groups that generate the same workload. 
+
+And the \Z~ method assumes:
+
+\begin{center}
+$\forall$ i $\neq$ j, 
+
+if $\left| R_i \right|$ = $\left| R_j \right|$ or $\left| S_i \right|$ = $\left| S_j \right|$, 
+
+then $\left| R_i \right|$ $\times$ $\left| S_i \right|$ $\approx$ $\left| R_j \right|$ $\times$ $\left| S_j \right|$
+\end{center} 
+That is to say, if the number of objects in each partition of $R$ is equivalent, then the sum of 
+the number of $k$ nearest neighbors of all objects in each partition can be considered 
+approximately equivalent, and vice versa.
+So an efficient partitioning should try to enforce either (i) $\left| R_i \right|$ = $\left| R_j 
+\right|$ or (ii) $\left| S_i \right|$ = $\left| S_j 
+\right|$.
+In paper \cite{Zhang:2012:EPK:2247596.2247602}, the authors give a short proof which 
+shows that the worst-case computational complexity for (i) is equal to:
+\begin{equation}
+\mathcal{O}\left(\left|R_i\right| \times log\left|S_i\right|\right) = \mathcal{O}\left(\frac{\left|R\right|}{n} \times log\left|S\right|\right) \label{eq:complexity1}
+\end{equation}
+and for choice (ii), the worst-case complexity is equal to:
+
+\begin{equation}
+\mathcal{O}\left(\left|R_i\right| \times log\left|S_i\right|\right) = \mathcal{O}\left(\left|R\right|\times log\frac{\left|S\right|}{n}\right) \label{eq:complexity2}
+\end{equation}
+where $n$ is the number of partitions. Since $n$~$\ll \left|S\right|$, the 
+optimal partitioning is achieved when $\left| R_i \right|$ = $\left| R_j \right|$.
+
+In \LSH, a custom partitioner is used to load balance tasks between reducers. Let $W_{h}=\mid R_{h} \mid \times \mid S_{h} \mid$ be the weight of bucket $h$. A bin packing algorithm is used such that each reducer ends up 
+with approximately the same amount of work. More precisely, let $\mathcal{O}\left(R_i\right)  = \sum_{h}{W_{h}}$ the
+work done by reducer $R{i}$, then this methods guarantees that 
+\begin{equation}
+\forall i \neq j, \mathcal{O}\left(R_i\right)  \approx  \mathcal{O}\left(R_j\right)
+\end{equation}
+Because the weight of a bucket is only an approximation of the computing time, this method can only give an
+approximate load balance. Having a large number of buckets compared to the number of reducers significantly improves
+the load balancing.   
+%
+%This load balancing is our improvement and obtained significant results. \TODO{it was not in the original paper? 
+%Justine: jsuis pas fan de le dire comme ça}
+
+%Where $T_i$ and $T_j$ are the $i^{th}$ and $j^{th}$ reduce task respectively. And %$O(T_i)$ and $O(T_j)$ are their relative time complexity which can be considered as $ \left| R_i \right| \times \left| S_i \right|$ and $ \left| R_j \right| \times \left| S_j \right|$.
+%In H-LSH. The buckets are independent, we only need to decide which bucket whould be dealed by which reducer. Thus H-LSH uses a centralized approach, defines a customer partitioner to calculate the optimum distribution. To distribute the buckets to the Reducers, we use a Bin Packing method where the weight of the bucket is its complexity. 
+%
+%
+%%Whole this method to compute the distribtion of cells/buckets do approximative calculation,
+%%By consequence we have sometimes reducer that finish before other. Thus put a little more of reducers that number total of slots allows to replace by an anther bucket and thus to keep a load balancing. Indeed, the optimal is that whole nodes works during all the job. 
+%
+% 
+%And the partitioner guarantees:
+%
+%\begin{center}
+%$\forall i \neq j, O\left(T_i\right) = O\left(T_j\right)$
+%\end{center}
+%where $T_i$ and $T_j$ are the $i^{th}$ and $j^{th}$ reduce task respectly, and $O\left(T_i\right)$ is the relative time complexity of the $i^{th}$ task, which can be considered as $ \left| R_i \right| \times \left| S_i \right|$.
+%However, these calculation methods for time complexity and bucket distribution are approximate.
+%So, in practice, the number of tasks has to be larger than the number of reducers (or computing resources) available in the system. 
+%But the calculation of the distribution of the cells/buckets is approximate. And we need to make the number of Reducers a little bit bigger than the number of the total slots, which can allow the 
+
+
+\subsection{Accuracy}
+%Among the systems we have introduced, one crucial property that we have not 
+%discussed yet is whether the system produces a reliable answer or not. In 
+%order to quickly get answers, some systems prefer to loosen the accuracy of the 
+%kNN computation. That is, in an approximate kNN computation, the results are 
+%the same as in an exact kNN computation with a high probability. Nevertheless, results can be sub-optimal in some cases and even 
+%incorrect with a low probability. This can be acceptable in situations where responsiveness is crucial, for example when there are user interactions. In 
+%some other cases, only an exact 
+%kNN computation is appropriate. Hence it is an important criteria, depending on the use cases.  
+
+%\TODO{Add theoretical analyses about Accuracy---Need to be checked}
+
+Usually, the lack of accuracy is the direct consequence of techniques to reduce the 
+dimensionality with techniques such as $z$-values and LSH. In 
+\cite{Zhang:2012:EPK:2247596.2247602} (\Z), the authors show that when the dimension of the 
+data increases, the quality of 
+the results tends to decrease. This can be counterbalanced by increasing the number of random 
+shifts applied to the data, thereby 
+increasing the size of the resulting dataset. Their experiments show that three 
+shifts of the initial dataset (in dimension 15) are sufficient to achieve a good approximation 
+(less than 10\% of errors measured), while controlling the computation time. 
+Furthermore, paper \cite{5447837_full} shows a detailed theoretical analyses showing that, for any fixed dimension, by using only $\mathcal{O}$(1) random shifts of data, the $z$-value method returns a constant factor approximation in terms of the radius of the $k$ nearest neighbor ball.
+
+For LSH, the accuracy is defined by the probability that the method will return the real nearest neighbor. Suppose that 
+the points within a distance $d = \left|p-q\right|$ are considered as close points. The probability \cite{4472264} that 
+these two points end up in the same bucket is: 
+\begin{equation}
+p(d) = Pr_\mathcal{H}\left[h(p)=h(q)\right] \\
+=\int_{0}^{W} \frac{1}{d} f_s (\frac{x}{d})(1-\frac{x}{W})dx
+\end{equation}
+where W is the size of the bucket and $f_s$ is the probability density function of the hash function $\mathcal{H}$. 
+From this equation we can see that for a given bucket size W, this probability decreases as the distance $d$ 
+increases. Another way to improve the accuracy of LSH is to increase the number of hashing families
+used. The use of LSH in \LSH~has an interesting consequence on the number of results. Depending on the parameters, 
+the number of elements in a bucket might be smaller than $k$. 
+Overall, unlike $z$-value, the performance of LSH depends a lot on parameter tuning. 
+%\cite{Dong:2008:MLP:1458082.1458172_full,6242372}.
+
+%A 
+%similar result can be obtained with LSH by 
+%increasing the number of hash functions used. However, when using space filling curves, the 
+%distance from the optimal solution (the true kNN) is often bounded, which is not the case for 
+%LSH, as explained in \cite{liao2001high}.
+
+%\sout{\TODOREP{
+%Like this paper the cite :http://www.cs.princeton.edu/cass/papers/cikm08.pdf,
+%The LSH's search quality is sensitive to several parameters that are quite data dependent.
+%A lot of paper give a model to determine the quality by dataset.
+%http://www.cs.princeton.edu/cass/papers/cikm08.pdf, \url{http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=6242372&url=http%3A%2F%2Fieeexplore.ieee.org%2Fiel5%2F5%2F4357935%2F06242372.pdf%3Farnumber%3D6242372
+%}
+%This search is a problematic where a lot of people focus it.
+%}
+%\TODO{END}}
+%a consequence of a pre-processing step 
+%performed to make the whole computation faster.
+%
+% Indeed, when dimensionality 
+%increases, the distance between the nearest and the furthest neighbors tends to 
+%decrease \cite{Beyer:1999:NNM:645503.656271}. This so called  
+%\emph{curse of dimensionality} strongly influences the efficiency of tree-based exact kNN methods. 
+%%\TODO{How? and why are we talking about centralized 
+%%approaches here?}
+%Also, dealing with data in high dimension greatly increases the complexity of the 
+%partitioning and the computation of the distances. Many techniques such as 
+%Voronoi-based diagrams or k-means, are in 
+%theory applicable but become increasingly inefficient as the number of 
+%dimensions increases. 
+%
+%Thus, one widely used method consists in reducing each point in the 
+%data space into a point in a single dimension, while preserving the distance 
+%relation between points. The representative techniques are $z$-values and LSH, as seen in the preprocessing section \ref{data_preprocessing}. 
+%However this step cannot be performed without loss of precision, and 
+%consequently the whole remaining process of the kNN computation suffers from 
+%this reduction, possibly leading to incorrect results.
+%
+%In \cite{Zhang:2012:EPK:2247596.2247602} (H-zkNNJ), the authors reduce the dimension of 
+%their data into one dimension, and are then able to partition 
+%the data into intervals that contain the desired number of nearest neighbors. 
+%By doing so, the authors gain one order of magnitude on the time needed 
+%to compute approximate kNN compared to the most efficient exact solution they 
+%found, and the gap tends to grow as the number of dimensions of the data 
+%increases. However, when the dimension of the data increases, the quality of 
+%the results tends to decrease, which they are able to counteract by 
+%increasing the number of different shifts used to reduce the dimension of the 
+%data to one dimension. The authors show in their experimentation that three 
+%shifts of the initial dataset are sufficient to achieve a good approximation 
+%(less than 10\% of errors shown in the experiences), while controlling the computation time.
+%%\TODO{This 
+%%is the z-value paper?Give more qualitative details maybe? do they 
+%%theoretically estimate the error? What about the LSH paper? any result?}
+%
+%LSH is also one of the projection method aimed to transform data from high dimension to low dimension. The performance of LSH depends on parameter tuning. Like z-value method, we also need to process projection many times to increase the accuracy. But unlike z-value who generates some shifts of the original data, LSH will perform directly on the original data but with many hash functions.
+
+%Although approximate, these solutions 
+%are indeed fully usable in practice and can provide a high level of confidence, depending on the quality of results required by the application. 
+%Nonetheless, error bounds are difficult nay impossible to compute, and mostly experiments enable to find the best parameters for a given approximate computation.
+%\TODO{we need a better conclusion. Is there a bound or the error depends on the dataset? Is the gain always an order of magnitude? what is the cost of shifting?}

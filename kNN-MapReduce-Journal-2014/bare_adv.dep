@@ -1,0 +1,151 @@
+\RequireVersions{
+  *{application}{TeX}     {1990/03/25 v3.x}
+  *{format} {LaTeX2e}     {2015/01/01 v2.e}
+  *{package}{snapshot}    {2002/03/05 v1.14}
+  *{class}  {IEEEtran}    {2014/09/17 v1.8a}
+  *{file}   {ot1ppl.fd}   {2001/06/04 v1/ppl.}
+  *{package}{graphicx}    {2014/10/28 v1.0g}
+  *{package}{keyval}      {2014/10/28 v1.15}
+  *{package}{graphics}    {2014/10/28 v1.0p}
+  *{package}{trig}        {1999/03/16 v1.09}
+  *{file}   {graphics.cfg}{2010/04/23 v1.9}
+  *{file}   {pdftex.def}  {2011/05/27 v0.06d}
+  *{package}{infwarerr}   {2010/04/08 v1.3}
+  *{package}{ltxcmds}     {2011/11/09 v1.22}
+  *{package}{balance}     {1999/02/23 v4.3}
+  *{package}{enumitem}    {2011/09/28 v3.5.2}
+  *{package}{rotating}    {2009/03/28 v2.16a}
+  *{package}{ifthen}      {2014/09/29 v1.1c}
+  *{package}{xcolor}      {2007/01/21 v2.11}
+  *{file}   {color.cfg}   {2007/01/18 v1.5}
+  *{file}   {dvipsnam.def}{2014/10/14 v3.0j}
+  *{package}{cite}        {2015/02/27 v5.5}
+  *{package}{lscape}      {2000/10/22 v3.01}
+  *{package}{caption}     {2013/05/02 v3.3-89}
+  *{package}{caption3}    {2013/05/02 v1.6-88}
+  *{package}{subcaption}  {2013/02/03 v1.1-62}
+  *{package}{multirow}    {0000/00/00 v0.0}
+  *{package}{ulem}        {2012/05/18 v0.0}
+  *{package}{latexsym}    {1998/08/17 v2.2e}
+  *{package}{amssymb}     {2013/01/14 v3.01}
+  *{package}{amsfonts}    {2013/01/14 v3.01}
+  *{package}{algorithmic} {2009/08/24 v0.1}
+  *{package}{array}       {1995/11/19 v1998/04/28}
+  *{package}{mdwmath}     {1996/04/11 v1.1}
+  *{package}{mdwtab}      {1998/04/28 v1.9}
+  *{package}{eqparbox}    {2013/03/15 v4.0}
+  *{package}{environ}     {2014/05/04 v0.3}
+  *{package}{trimspaces}  {2009/09/17 v1.1}
+  *{package}{float}       {2001/11/08 v1.3d}
+  *{package}{hyperref}    {2012/11/06 v6.83m}
+  *{package}{hobsub-hyperref}{2012/05/28 v1.13}
+  *{package}{hobsub-generic}{2012/05/28 v1.13}
+  *{package}{hobsub}      {2012/05/28 v1.13}
+  *{package}{ifluatex}    {2010/03/01 v1.3}
+  *{package}{ifvtex}      {2010/03/01 v1.5}
+  *{package}{intcalc}     {2007/09/27 v1.1}
+  *{package}{ifpdf}       {2011/01/30 v2.3}
+  *{package}{etexcmds}    {2011/02/16 v1.5}
+  *{package}{kvsetkeys}   {2012/04/25 v1.16}
+  *{package}{kvdefinekeys}{2011/04/07 v1.3}
+  *{package}{pdftexcmds}  {2011/11/29 v0.20}
+  *{package}{pdfescape}   {2011/11/25 v1.13}
+  *{package}{bigintcalc}  {2012/04/08 v1.3}
+  *{package}{bitset}      {2011/01/30 v1.1}
+  *{package}{uniquecounter}{2011/01/30 v1.2}
+  *{package}{letltxmacro} {2010/09/02 v1.4}
+  *{package}{hopatch}     {2012/05/28 v1.2}
+  *{package}{xcolor-patch}{2011/01/30 v0.0}
+  *{package}{atveryend}   {2011/06/30 v1.8}
+  *{package}{atbegshi}    {2011/10/05 v1.16}
+  *{package}{refcount}    {2011/10/16 v3.4}
+  *{package}{hycolor}     {2011/01/30 v1.7}
+  *{package}{ifxetex}     {2010/09/12 v0.6}
+  *{package}{auxhook}     {2011/03/04 v1.3}
+  *{package}{kvoptions}   {2011/06/30 v3.11}
+  *{file}   {pd1enc.def}  {2012/11/06 v6.83m}
+  *{file}   {hyperref.cfg}{2002/06/06 v1.2}
+  *{package}{url}         {2013/09/16 v3.4}
+  *{file}   {hpdftex.def} {2012/11/06 v6.83m}
+  *{package}{rerunfilecheck}{2011/04/15 v1.7}
+  *{package}{boxedminipage}{0000/00/00 v0.0}
+  *{package}{mwe}         {2012/05/15 v0.3}
+  *{package}{lipsum}      {2014/07/27 v1.3}
+  *{package}{blindtext}   {2012/01/06 v2.0}
+  *{package}{xspace}      {2014/10/28 v1.13}
+  *{package}{authblk}     {2001/02/27 v1.3}
+  *{file}   {supp-pdf.mkii}{0000/00/00 v0.0}
+  *{package}{epstopdf-base}{2010/02/09 v2.5}
+  *{package}{grfext}      {2010/08/19 v1.1}
+  *{file}   {epstopdf-sys.cfg}{2010/07/13 v1.3}
+  *{package}{nameref}     {2012/10/27 v2.43}
+  *{package}{gettitlestring}{2010/12/03 v1.4}
+  *{file}   {bare_adv.out}{0000/00/00 v0.0}
+  *{file}   {bare_adv.out}{0000/00/00 v0.0}
+  *{file}   {ot1phv.fd}   {2001/06/04 v1/phv.}
+  *{file}   {ulasy.fd}    {1998/08/17 v2.2e}
+  *{file}   {umsa.fd}     {2013/01/14 v3.01}
+  *{file}   {umsb.fd}     {2013/01/14 v3.01}
+  *{file}   {omsppl.fd}   {0000/00/00 v0.0}
+  *{file}   {parts/abstract.tex}{0000/00/00 v0.0}
+  *{file}   {upzd.fd}     {2001/06/04 v0.0}
+  *{file}   {parts/abstract.tex}{0000/00/00 v0.0}
+  *{file}   {parts/abstract.tex}{0000/00/00 v0.0}
+  *{file}   {parts/introduction-sec.tex}{0000/00/00 v0.0}
+  *{file}   {parts/preliminaries-sec.tex}{0000/00/00 v0.0}
+  *{file}   {parts/workflow-sec.tex}{0000/00/00 v0.0}
+  *{file}   {parts/data-preprocessing-subsec.tex}{0000/00/00 v0.0}
+  *{file}   {parts/data-organization-subsec.tex}{0000/00/00 v0.0}
+  *{file}   {res/voronoi-partition.pdf}{0000/00/00 v0.0}
+  *{file}   {res/projection-partition.pdf}{0000/00/00 v0.0}
+  *{file}   {res/lsh-partition.png}{0000/00/00 v0.0}
+  *{file}   {parts/execution-model-subsec.tex}{0000/00/00 v0.0}
+  *{file}   {parts/new_workflow_summary.tex}{0000/00/00 v0.0}
+  *{file}   {res/workflow.pdf}{0000/00/00 v0.0}
+  *{file}   {parts/accuracy-subsec.tex}{0000/00/00 v0.0}
+  *{file}   {parts/complexity-subsec.tex}{0000/00/00 v0.0}
+  *{file}   {parts/tab.tex}{0000/00/00 v0.0}
+  *{file}   {parts/analysis-summary-subsec.tex}{0000/00/00 v0.0}
+  *{file}   {parts/experience.tex}{0000/00/00 v0.0}
+  *{file}   {img-perf/geo/data/nodes.pdf}{0000/00/00 v0.0}
+  *{file}   {parts/exp-geo.tex}{0000/00/00 v0.0}
+  *{file}   {img-perf/geo/data/time.pdf}{0000/00/00 v0.0}
+  *{file}   {img-perf/geo/data/memory.pdf}{0000/00/00 v0.0}
+  *{file}   {img-perf/geo/data/accuracy.pdf}{0000/00/00 v0.0}
+  *{file}   {img-perf/geo/k/time.pdf}{0000/00/00 v0.0}
+  *{file}   {img-perf/geo/k/memory.pdf}{0000/00/00 v0.0}
+  *{file}   {img-perf/geo/k/accuracy.pdf}{0000/00/00 v0.0}
+  *{file}   {img-perf/geo/data/shuffle.pdf}{0000/00/00 v0.0}
+  *{file}   {img-perf/geo/k/shuffle.pdf}{0000/00/00 v0.0}
+  *{file}   {parts/exp-surf.tex}{0000/00/00 v0.0}
+  *{file}   {img-perf/surf/data/time.pdf}{0000/00/00 v0.0}
+  *{file}   {img-perf/surf/data/memory.pdf}{0000/00/00 v0.0}
+  *{file}   {img-perf/surf/data/accuracy.pdf}{0000/00/00 v0.0}
+  *{file}   {img-perf/surf/k/time.pdf}{0000/00/00 v0.0}
+  *{file}   {img-perf/surf/k/memory.pdf}{0000/00/00 v0.0}
+  *{file}   {img-perf/surf/k/accuracy.pdf}{0000/00/00 v0.0}
+  *{file}   {img-perf/surf/data/shuffle.pdf}{0000/00/00 v0.0}
+  *{file}   {img-perf/surf/k/shuffle.pdf}{0000/00/00 v0.0}
+  *{file}   {img-perf/dim/datasettime.pdf}{0000/00/00 v0.0}
+  *{file}   {img-perf/dim/datasetacc.pdf}{0000/00/00 v0.0}
+  *{file}   {img-perf/dim/randtime.pdf}{0000/00/00 v0.0}
+  *{file}   {img-perf/dim/randacc.pdf}{0000/00/00 v0.0}
+  *{file}   {img-perf/perso/loadbalancing/hbnlj.pdf}{0000/00/00 v0.0}
+  *{file}   {img-perf/perso/pgbj/strategy.pdf}{0000/00/00 v0.0}
+  *{file}   {img-perf/perso/pgbj/geo_20r_400.pdf}{0000/00/00 v0.0}
+  *{file}   {img-perf/perso/pgbj/greedy_20r_400.pdf}{0000/00/00 v0.0}
+  *{file}   {img-perf/perso/lsh/params_geo_time.pdf}{0000/00/00 v0.0}
+  *{file}   {img-perf/perso/lsh/params_surf.pdf}{0000/00/00 v0.0}
+  *{file}   {parts/conclusion.tex}{0000/00/00 v0.0}
+  *{file}   {bare_adv.bbl}{0000/00/00 v0.0}
+  *{file}   {authors/Sophie.JPG}{0000/00/00 v0.0}
+  *{file}   {authors/Sophie.JPG}{0000/00/00 v0.0}
+  *{file}   {authors/Justine.png}{0000/00/00 v0.0}
+  *{file}   {authors/Justine.png}{0000/00/00 v0.0}
+  *{file}   {authors/lea.jpg}{0000/00/00 v0.0}
+  *{file}   {authors/lea.jpg}{0000/00/00 v0.0}
+  *{file}   {authors/fabrice.jpg}{0000/00/00 v0.0}
+  *{file}   {authors/fabrice.jpg}{0000/00/00 v0.0}
+  *{file}   {authors/Magoules.jpg}{0000/00/00 v0.0}
+  *{file}   {authors/Magoules.jpg}{0000/00/00 v0.0}
+}

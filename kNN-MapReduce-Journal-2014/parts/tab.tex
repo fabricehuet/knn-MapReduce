@@ -1,0 +1,62 @@
+%\begin{table*}[htp]
+%\centering
+%\begin{tabular}{|c|c|c|c|c|c|c|}
+%\hline
+%\multirow{2}{*}{\textbf{Systems}}  & \multirow{2}{*}{\textbf{Preprocessing}} & \multirow{2}{*}{\textbf{Partitioning}}                                              
+%& \multirow{2}{*}{\textbf{Accuracy}} & \multicolumn{3}{c|}{\textbf{Complexity}} \\ \cline{5-7} 
+%                                                                     &                                                                         &                                                                            & \multicolumn{1}{l|}{}                          & \textbf{Total Jobs} & \textbf{Tasks}               & \textbf{Sort}                                           \\ \hline
+%\begin{tabular}[c]{@{}c@{}}\textbf{H-BkNNJ}\\ (Basic Method)\end{tabular}     & None                                                                    & None                                                                       & Exact                                          & 1          & 1                   & $\left|S\right| \times log\left|S\right|$                 \\ \hline
+%\begin{tabular}[c]{@{}c@{}}\textbf{H-BNLJ} \cite{Zhang:2012:EPK:2247596.2247602} \\ (Zhang et al.)\end{tabular}      & None                                                                    & None                                                                       & Exact                                          & 2          & $p^2$ & $\left(n \cdot k\right) \times log\left(n \cdot k\right)$ \\ \hline
+%\begin{tabular}[c]{@{}c@{}}\textbf{PGBJ} \cite{Lu:2012:EPK:2336664.2336674}\\ (Luet al.)\end{tabular}            & \begin{tabular}[c]{@{}c@{}}Pivots\\ Selection\end{tabular}              & \begin{tabular}[c]{@{}c@{}}Distance Based\\ (Voronoi Diagram)\end{tabular} & Exact                                          & 3          & $\left|grouping\right|$                   & $\left|S_i\right| \times log\left|S_i\right|$             \\ \hline
+%\begin{tabular}[c]{@{}c@{}}\textbf{RankReduce} \cite{Stupar10rankreduce-}\\ (Stupar et al.)\end{tabular} & LSH                                                                     & Size Based                                                                 & Approximate                                    & 3           & $\left|buckets\right|$   & $\left(L \cdot k\right) \times log\left(L \cdot k\right)$ \\ \hline
+%\begin{tabular}[c]{@{}c@{}}\textbf{H-zkNNJ} \cite{Zhang:2012:EPK:2247596.2247602}\\ (Zhang et al.)\end{tabular}     & \begin{tabular}[c]{@{}c@{}}Z-Value\\ (Space Filling\\ Curve)\end{tabular} & Size Based                                                                 & Approximate                                    & 3          & n                  & $\left(2 \cdot k\right) \times log\left(2 \cdot k\right)$ \\ \hline
+%\end{tabular}
+%\caption{Summary table of kNN computing systems with MapReduce \TODOREP{(qui est n qui est i ect....)}}\label{summary_table}
+%\end{table*}
+
+
+% Please add the following required packages to your document preamble:
+% \usepackage{multirow}
+\begin{table*}[htp]
+\centering
+\renewcommand{\arraystretch}{1.3} 
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+\multirow{4}{*}{\centering{ \bf Methods}}                                            & \multirow{4}{*}{\centering{\textbf{Preprocessing}}}                                & 
+\multirow{4}{*}{\centering{\textbf{Partitioning}}}                                   &
+\multirow{4}{*}{\centering{\textbf{Accuracy}}} &
+\multicolumn{4}{c|}{\textbf{Complexity}}                                                                                \\ \cline{5-8} 
+                                                                              &                                                                           &                                                                            &                                    & \textbf{Jobs} & \textbf{Tasks}   &\textbf{\begin{tabular}[c]{@{}c@{}} Final\\ Candidate \\ (per $r_i$)\end{tabular}} & \multicolumn{1}{c|}{\textbf{Communication}} \\ \hline
+\begin{tabular}[c]{@{}c@{}}\textbf{H-BkNNJ}\\ (Basic Method)\end{tabular}    & None                                                                      & None                                                                       & Exact                              & 1             & 1                                                      &                                           $|S|$                                   &                                            $\mathcal{O} (\left|R\right|+\left|S\right|)$ \\ \hline
+\begin{tabular}[c]{@{}c@{}}\textbf{H-BNLJ} \cite{Zhang:2012:EPK:2247596.2247602} \\ (Zhang et al.)\end{tabular}      & None                                                                      & None                                                                       & Exact                              & 2             & $n^2$  & $nk$                                   &                \begin{tabular}[c]{@{}c@{}}                            $\mathcal{O}(n\left|R\right|$ \\
+$+n\left|S\right|+kn\left|R\right|)$ \end{tabular} \\ \hline
+\begin{tabular}[c]{@{}c@{}}\textbf{PGBJ} \cite{Lu:2012:EPK:2336664.2336674}\\ (Lu et al.)\end{tabular}             & 
+\begin{tabular}[c]{@{}c@{}}Pivots\\ Selection\end{tabular}                & \begin{tabular}[c]{@{}c@{}}Distance \\ 
+Based\end{tabular} & Exact                              & 3             & 
+n                                                     &  $\left|S_i\right|$                                   & 
+\begin{tabular}[c]{@{}c@{}}                                  $\mathcal{O}(\left|R\right|$ \\
+$ + \left|S\right| + \left|RepS_c\right|\cdot n)$ \end{tabular}                                    \\ \hline
+\begin{tabular}[c]{@{}c@{}}\textbf{\LSH} \cite{Stupar10rankreduce-}\\ (Stupar et al.)\end{tabular} & 
+LSH                                                                       & Size 
+Based                                                                 & Approximate                        & 
+3             & n                   & 
+\begin{tabular}[c]{@{}c@{}}
+$L \cdot k $
+\end{tabular}                            &           \begin{tabular}[c]{@{}c@{}}   $ \mathcal{O}(|R|+|S|$ \\ $+ 
+k \cdot |R|)$          \end{tabular}                     \\ \hline
+\begin{tabular}[c]{@{}c@{}}\textbf{H-zkNNJ} \cite{Zhang:2012:EPK:2247596.2247602}\\ (Zhang et al.)\end{tabular}    & 
+\begin{tabular}[c]{@{}c@{}}Z-Value\end{tabular} & Size 
+Based                                                                 & Approximate                        & 
+3             & n                  & \begin{tabular}[c]{@{}c@{}}$\alpha \cdot k 
+$\end{tabular}                                   &    $\mathcal{O}(\frac{1}{\varepsilon^2}+\left|S\right|+k \cdot 
+\left|R\right|)$                                         \\ \hline
+\end{tabular}
+\caption{Summary table of kNN computing systems with MapReduce
+%\TODOREP{Y'a encore des erreurs !!! pour z la dernire phase t'as juste $shift*k$ candidates c'est ds la phase 2 ou tu extrait $2*k$. communication overhead pour Zvalue est fausse aussi.
+%en plus ca apporte rien si au moins on rajoute une cologne intermediate candidate.
+%Apres pour PGBJ vous mettez 1 colonne pas deux ainsi que pour HBKNNJ
+%}
+\label{summary_table_new}
+}
+\end{table*}
+

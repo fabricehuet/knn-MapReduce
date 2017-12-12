@@ -1,0 +1,12 @@
+\vspace{-0.25cm}
+\subsection{Wrap up}
+Although the workflow for computing kNN on MapReduce is the same for all existing solutions, the guarantees offered by each of them vary a lot. As load 
+balancing is a key point to shrink completion time, one should carefully choose the partitioning method to achieve this goal. Also, the accuracy of the 
+computing system is crucial: are exact results really needed? If not, then one might trade accuracy for efficiency, by using data transformation 
+techniques before the actual computation. 
+Complexity of the global system should also be taken into account for particular needs, although it is often related to the accuracy: an exact system is 
+usually more complex than an approximate one.
+Finally, none of the systems really offers a way to handle data updates. This is due to the specific partitioning performed before computing. Indeed, an 
+efficient partitioning is adapted to a particular dataset, and might not be adapted to another.
+Table~\ref{summary_table} is a summary table of the systems we have examined and their main characteristics.
+

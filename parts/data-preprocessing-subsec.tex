@@ -1,0 +1,79 @@
+\subsection{Data Preprocessing}\label{data_preprocessing}
+The preprocessing stage aims either at processing the initial dataset to reduce its complexity or produces extra information
+about the data. It is an optional step, as some algorithms can directly work on the initial data, as H-BkNNJ, H-BNLJ and 
+H-BRJ \cite{Zhang:2012:EPK:2247596.2247602}.
+%Some kNN join methods directly treat the dataset, but some need to threat the transformation of the dataset. 
+\vspace{2pt}
+
+For high-dimensional data, the first pre-processing approach projects data onto low-dimensional ones. One way to reduce the complexity and size of the dataset is to use space-filling curves as shown in \cite{5447837}. The solution consists in mapping
+high-dimensional data to low-dimensional ones while maintaining the locality relationship between each object with high 
+probability (two elements that are close in a high-dimensional space should remain close in the reduced dimensional space). In \cite{Zhang:2012:EPK:2247596.2247602}, the authors compute the $z$-value of all data from $R$ and $S$. The $z$-value of a 
+data is a one dimensional value that is  
+calculated by interleaving the binary representation of the coordinates from MSB (Most Significant Bit) to LSB (Least 
+Significant Bit). However, the ability of $z$-value to 
+maintain the relative locality between objects in space is not good enough, especially when the dimension is high. Therefore, 
+in practice, several random shifts of 
+the data are generated, and additional $z$-values are computed, which aims to improve the accuracy at the cost of computation and space. 
+%\TODO{check}. 
+%This means that, the larger the data, the more overhead of the 
+%partitioning step. 
+
+Another way to reduce the dimension of data is LSH. In RankReduce \cite{Stupar10rankreduce-}, high-dimensional data are projected onto low-dimensional ones using 
+\emph{Locality Sensitive Hashing (LSH)}. The idea is to use a group of locality preserving hash functions to map close points 
+from the original data to the same hash value with high probability. The overall performance of LSH depends on parameter 
+tuning \cite{Bawa:2005:LFS:1060745.1060840} which depends on the original dataset. Although it is likely for related objects 
+to have
+the same hash values, in general, one single
+hash function cannot guarantee a satisfying accuracy. Often,
+a group of hash functions is required in order to generate multiple hash tables
+to reduce the number of collisions for distant objects.
+
+In fact, as the quality of the projection is data dependent, both solutions in \cite{Zhang:2012:EPK:2247596.2247602} and 
+\cite{Stupar10rankreduce-} duplicate the initial dataset and use different parameters for the projection to end up with 
+several projected datasets. The purpose of this duplication is to alleviate information loss from the initial dataset: having 
+multiple projected datasets enable to isolate potential errors.
+Overall, those solutions are willing to pay the same computation several times on different projected datasets in trade for the complexity of data. 
+%\TODO{already explained above for LSH, we need to fix this}.
+\vspace{2pt}
+
+%<<<<<<< .mine
+Another approach consists in selecting leaders in the dataset which will drive the subsequent computation.
+In PGBJ \cite{Lu:2012:EPK:2336664.2336674}, the preprocessing phase tries to identify pivot points (points that correspond 
+more or less to the barycenter of a cluster of points) in the initial dataset which will lead a partition of the dataset. Thus, 
+it is a primary selection before the partitioning stage. In paper \cite{Lu:2012:EPK:2336664.2336674}, three strategies to 
+select the pivots are described.  
+The "Random Selection" strategy generates a set of samples, and calculates the pairwise distance for every point in the 
+samples, and then sums all the distances together. Then, the sample with the biggest summation of distances will be chosen as 
+set of pivots. This strategy provides good results as long as the sample sets are big enough, to maximize the chance to select 
+points in different clusters. 
+The "Farthest Selection" strategy randomly chooses the first pivot. Then, the farthest point to the first pivot will be chosen 
+as the second pivot, and so on until having the desired number of pivots. This strategy ensures 
+that the distance between each selected point is as large as possible, but it is heavier to process than the previous one, as 
+it requires the computing of a lot of distances. 
+Finally, the "K-Means Selection" applies the 
+traditional k-means method on a data sample to update the centroid of a cell as the new pivot each step, until the pivots do 
+not change. With this strategy, the pivots are ensured to be in the middle of a cluster of points, but it is the heaviest 
+strategy as it needs to converge towards the optimal solution.
+As we will see in the next section, the quality of pivots has an important impact on the quality of the partitioning.
+%However, the quality of the selected pivots is primary to balance the data as equally as possible.
+%This approach will only divide the data into some sphere shaped partitions around the pivots.
+
+%To sum up this part, preprocessing methods are based on two strategies: projection or pivots selection. The first method tends 
+%to lose some information about the data but greatly reduces the complexity of the subsequent steps.
+%On the contrary, the second method is more tedious to perform but preserves data, as it just a selection and not a 
+%transformation.
+
+%as we will see in the next section 
+%=======
+%Some kNN join methods directly treat the dataset, but some need to threat the transformation of the dataset. H-zkNNJ \cite{Zhang:2012:EPK:
+%2247596.2247602} transforms the dataset into their $z$-value. $Z$-value is a kind of space-filling curve. It maps the high-dimensional data into low-
+%dimension while holding the positional relationship between each object with a high probability. The $z$-value of an object is calculated by interleaving 
+%the binary representation of its coordinates from MSB to LSB. The $z$-value could be calculated in the pre-processing part.
+%RankReduce projects the high dimension data into a low dimension ones in using LSH. LSH is a group of hash functions based on locality preserving. They 
+%can map the close points in high-dimensional space to the same hash value with a considerable probability. The hash value of each objects can also be 
+%computed in the pre-processing step.
+%
+%Some partition methods for processing kNN on mapreduce need to firstly choose some representative points which are called pivots to define the 
+%partition. H-VDkNNJ adopts a pre-processing stage to select a set of pivots to be used for partitioning. A more precise description can be found in 
+%partition method part.
+%>>>>>>> .r2824

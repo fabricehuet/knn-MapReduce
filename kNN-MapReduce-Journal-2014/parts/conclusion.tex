@@ -1,0 +1,41 @@
+\section{Conclusion}
+
+In this paper, we have studied existing solutions to perform the kNN operation in the context of MapReduce. 
+We have first approached this problem from a workflow 
+point of view. We have pointed out that all solutions follow three main steps to compute kNN over MapReduce, namely 
+preprocessing of data, partitioning and actual computation. We have listed and explained the different algorithms which could 
+be chosen for each step, and developed their pros and cons, in terms of load 
+balancing, accuracy of results, and overall complexity. 
+In a second part, we have performed extensive experiments to compare the performance, disk 
+usage and accuracy of all these algorithms in the same environment. We have mainly used two real datasets, a geographic
+coordinates one (2 dimensions) and an image based one (SURF descriptors, 128 dimensions). For all algorithms,
+it was the first published experiment on such high dimensions. Moreover, we have performed a fine analysis, 
+outlining, for each algorithm, the importance and difficulty of fine tuning some parameters to obtain the best 
+performance.
+
+Overall, this work gives a clear and detailed view of the current algorithms for processing kNN on MapReduce. It also 
+clearly exhibits the limits of each of them in practice and shows precisely the context where they best perform. Above 
+all, this paper can be seen as a guideline to help 
+selecting  the most appropriate method to perform the kNN join operation on MapReduce for a particular use case.
+
+After this thorough analysis, we have found a number of limitations on existing solution which could be addressed 
+in future work. First, besides 
+\HBK, all methods need to replicate the original data to some extend. The number of replications, although
+necessary to improve precision, has a great impact on  disk usage and  communication overhead. Finding the optimal
+parameters to reduce this number is still an open issue. 
+Second, the partitioning methods are all based on properties of $R$. However, one can expect $R$ to vary as it 
+represents the query set. The cost of re-partitioning is currently prohibitive so, for dynamic queries, better 
+approaches might rely on properties of $S$. Finally, MapReduce, especially through its Hadoop implementation, is well 
+suited for
+batch processing of static data. The efficiency of theses methods on data stream has yet to be investigated. 
+%
+%It would be interesting to investigate the impact of re-partitioning techniques with 
+%changing $R$ or   data for each new query set is not 
+%very efficient. So can we find a way to first partition 
+%$S$ then adapt R to S? Finally, MapReduce is an offline mechanism for static data. If there is even a small update of 
+%data, we need to re-calculate the whole dataset. In this case, will the platform for processing data stream like 
+%Apache 
+%Storm or Spark Streaming be better? We left these open issues to the reader to discover.
+
+%\TODOREP{ Thanks to these analysis, we can go further. For example the algorithm can be mixed together. By the experience, we demonstrated that 3MR(map reduce job) cost less 2 MR. If we cut each bucket like of new R and S and apply  independant  job, may be $n$ MR would be better. And it integrates the idea of level mentionated in this papper http://gamma.cs.unc.edu/KNN/bilevel.pdf . Another point is the partitionning . Z value depends to S. Voronoi of statistic of R and of S. How can we partitionate just for the dataset S and do R arrive in the fly ?. Another problematic is the replication of data, Does  it exist a way  to avoid the replication. Maybe we can imagine a system of propagation on cells close ? 
+%Another point is about paradigm. Map Reduce is it more suitable or the technologies like Spark, Flink that uses ETL are better in this case ?}

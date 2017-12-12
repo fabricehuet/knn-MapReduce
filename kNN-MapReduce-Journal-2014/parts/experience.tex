@@ -1,0 +1,463 @@
+\section{Evaluation}\label{evaluation}
+In order to compare theoretical performance and performance in practice, we performed an extensive experimental evaluation of the algorithms described in the 
+previous sections.
+
+The experiments were run on two clusters of Grid'5000\footnote{\url{www.grid5000.fr}}, one with Opteron 2218 processors 
+and 8GB of memory, the other with Xeon E5520 processors and 32GB of memory, using Hadoop 1.3, 1Gb/s Ethernet and SATA hard drives. %\TODO{hard disk type, 
+%ethernet. . Not useful, too much details}. 
+We follow the default configuration of 
+Hadoop: (1) the number of 
+replications for each split of data is set 
+to 3; (2) the number of slot of each node is 1, so only one map/reduce task is processed on the node at one time.
+%\TODO{(3) the virtual memory for each map/reduce tasks is: xxx}
+
+We evaluate the five approaches presented before.
+% following approaches in the experiments.
+%
+%\begin{itemize}
+%
+%\item \textbf{H-BkNNJ:} the naive method.
+%
+%\item \textbf{H-BNLJ:} the block nested loop method.
+%
+%\item \textbf{PGBJ:} the method using Voronoi Diagram to partition data
+%
+%\item \textbf{RankReduce:} the method using LSH to reduce the dimension of data
+%
+%\item \textbf{H-zkNNJ:} the method using z-value to reduce the dimension of data
+%
+%\end{itemize}
+
+ For \Z~and \HBNLJ, we took the source code provided by the authors as a starting 
+point\footnote{\url{http://ww2.cs.fsu.edu/~czhang/knnjedbt/}} and added some modifications to reduce the size of 
+intermediate files. The others were implemented from scratch using the 
+description provided in their respective papers.
+
+When implementing \LSH, we added a reduce phase to the first MapReduce job to compute some statistics information for 
+each bucket. These information is used for achieving good load balance. %Using these statistics, a custom partitioner 
+%distributes buckets among the 
+%reducers to try to achieve good work balance. 
+Moreover, in the original version, the authors only use one 
+hash function. To improve the precision, we choose to use multiple families and hash functions depending on the 
+dataset. Finally, our version of \LSH~ uses three MapReduce jobs instead of two.
+
+Most of the experiments were ran using two different datasets: 
+
+\begin{itemize}
+
+\item \textbf{OpenStreetMap: }we call it the \emph{Geographic - or Geo - dataset}. The Geo dataset  
+involves geographic XML data in two dimensions\footnote{Taken from: \url{http://www.geofabrik.de/data/download.html}}. 
+This is a real dataset containing the location and description of objects. The data is organized by region. We extract 
+$256*10^5$ records from the region of France.
+
+\item \textbf{Catech 101: }we call it the \emph{Speeded Up Robust Features - or SURF - dataset}. It is a public set of images\footnote{Taken from: \url{www.vision.caltech.edu/Image_Datasets/Caltech101}}, which contains 101 categories of pictures of objects, and 40 to 800 images per category. 
+SURF\cite{Surf} is a detector and a descriptor for points of interest in images, which produces image data
+%Image feature descriptors are known to be high dimensional data, so we chose to use SURF\cite{Surf}, which produces image data
+in 128 dimensions.  We extract 32 images per category, each image has between 1000 and 2000 descriptors.
+
+\end{itemize}
+
+In order to learn the impact of dimension and dataset, we use 5 additional datasets: \textbf{El Nino: } in 9 dimensions; \textbf{HIGGS: } in 28 dimensions; \textbf{TWITTER: } in 77 dimensions; \textbf{BlogFeedBack: } in 281 dimensions; and \textbf{Axial Axis: } in 386 dimensions. These data sets are all downloaded from UCI Machine Learning Repository\footnote{Taken from: \url{https://archive.ics.uci.edu/ml/}}.
+
+%In order to learn the impact of dimension and dataset, we also use: \textbf{El Nino: }(in 9 dimensions) consists of nearly 70 moored buoys spanning the equatorial Pacific to measure oceanographic and surface meteorological variables; \textbf{HIGGS: }(in 28 dimensions) has been produced using Monte Carlo simulations, where the first 21 features (columns 2-22) are kinematic properties and the last seven features are functions of the first 21 features  to help discriminate between the two classes; \textbf{TWITTER: }(in 77 dimensions) contains two different social networks Tom’s Hardware (TH) (41 million visitors per month) and Twitter (TW) (500 million visitors per month); \textbf{SIFT: }(in ) \TODO{I didn't find any description}; \textbf{BlogFeedBack: }(in 281 dimensions) originates from blog posts; and \textbf{Axial Axis: }(in 386 dimensions) was retrieved from a set of 53500 CT images from 74 different 
+%patients (43 male, 31 female). These data sets are all downloaded from UCI Machine Learning Repository\footnote{Taken from: \url{https://archive.ics.uci.edu/ml/}}.
+
+We use a self-join for all our experiments, which means we use two datasets of equal sizes for $R$ and $S$ 
+($|R|=|S|$). We also vary the number of 
+records of each dataset from $0.125*10^5$ to $256*10^5$.
+For all experiments, we have set $k=20$ unless specified otherwise. 
+%The specified number of records is always the same for both $R$ and $S$ (query points and database points), i.e $|R|=|S|$ 
+%although $R\cap S = \emptyset$ <- non au contraire R=S
+
+We study the methods from the following aspects:
+\begin{itemize}
+
+\item The impact of data size
+
+\item The impact of $k$
+
+\item The impact of dimension and dataset
+
+\end{itemize}
+
+And we record the following information: the processing time, the disk space required, the recall and precision, and the communication overhead.
+
+To assess the quality of the approximate algorithms, we compute two commonly used metrics and use the results of 
+the exact algorithm \VO~as a reference. First, we define the recall as $ recall = \frac{\mid A(v) \bigcap I(v) 
+\mid}{\mid  
+I(v) \mid}$%\cite{Dong:2008:MLP:1458082.1458172_full}  
+, where  $I(v)$ are the exact kNN of $v$ and $A(v)$ the kNN found 
+by the approximate methods. Intuitively, the recall measures the ability of an algorithm to find the correct kNNs.
+Another metric, the precision is defined by $precision =  \frac{\mid A(v) \bigcap I(v) \mid}{\mid  
+A(v) \mid}$. It measures the fraction of correct kNN in the
+final result set. By definition, the following properties holds: (1) $recall \leq precision$ because all the tested 
+algorithms return up to $k$ elements. (2) if an approximate algorithms outputs $k$ elements, 
+then  $ recall = precision$. 
+
+Each algorithm produces intermediate data so we compute a metric called \emph{Space requirement} based on the size of
+intermediate data ($Size_{intermediate}$), the size of the result ($Size_{final}$) and the size of the correct kNN 
+($Size_{correct}$). We thus have $space = \frac{Size_{final}+Size_{intermediate}}{Size_{correct}}$.
+% of possible kNN of $v$.
+%Several parameters can impact the performance of computing kNN on MapReduce. We will focus on the size of the 
+%input data in number of records for both $R$ and $S$, the number of machines used in the MapReduce cluster (thereafter 
+%number of \emph{nodes}), the value of $k$ of the kNN query. 
+
+
+We start by evaluating the most efficient number of machines to use (hereafter called \emph{nodes}) in terms of resources and computing 
+time. For that, we measure the computing time of all algorithm for three different data input size of the geographic dataset.
+The result can be seen on Figure \ref{fig:geo_data_nodes}.
+\begin{figure}[!h]
+ \centering
+ %Fichier généré par excel/Nodes.xlsx 
+ %Avec données datares/geo/nodes/
+ %Fichier python perf/src/geo/timebyNodes.py
+ \includegraphics[width=0.5\textwidth]{img-perf/geo/data/nodes.pdf}
+ \caption{Impact of the number of nodes on computing time  \label{fig:geo_data_nodes}}
+\end{figure}
+As expected, the computing time is strongly related to the number of nodes. Adding more nodes increases parallelism, reducing the
+overall computing time. There is however a significant slow down after using more than 15 machines. Based on those
+results, and considering the fact that we later use larger datasets, we conducted all subsequent experiments using at 
+most 20 nodes.
+
+
+\input{parts/exp-geo.tex}
+
+\input{parts/exp-surf.tex}
+
+\subsection{Impact of Dimension and Dataset}
+We now analyze the behavior of these algorithms according to the dimension of  data. Since 
+some algorithms are dataset dependent (i.e the spatial distribution of data has an impact on 
+the outcome), we need to separate data distribution from the dimension. Hence, we use two
+different kinds of datasets for these experiments. First, we use real world data of various 
+dimensions\footnote{archive.ics.uci.edu/ml/datasets.html}. Second, we have built specific datasets by generating 
+uniformly distributed data to limit the impact of clustering. All the experiments were performed using 
+$0.5*10^5$ records and $k=20$. 
+ 
+%
+% \begin{table}[h]
+% 	\begin{center}
+% 		\begin{tabular}{|c|c|c|}
+% 			\hline 
+%% 			& \multicolumn{2}{|c|}{Size} \\
+%% 			\cline{2-3}
+% 			Dimension & Real & Synthetic \\
+% 			\hline
+% 			2 & 7.1MB & 846KB \\
+% 			9 & 3.5MB & 2.8MB \\
+% 			28 & 35MB & 8MB  \\
+% 			77& 23MB & 21MB \\
+% 			128 & 63MB & 36MB  \\
+% 			281 & 60MB & 78MB\\
+% 			386 & 73MB & 107MB  \\
+% 			\hline
+% 		\end{tabular}
+%% 		\caption{Size of $0.5*10^{5}$ records for $R$ and $S$ in dimension experiments\label{table:datasetup_dim}
+% 			\TODO{Do we keep it?}}
+% 	\end{center}
+% \end{table}
+ 
+
+
+
+%%%% Generated by 3-dim.py
+\begin{figure*}[ht]
+	\centering
+	\begin{subfigure}[b]{0.5\textwidth}
+		\includegraphics[width=1\textwidth]{img-perf/dim/datasettime.pdf} 
+		\caption{Execution time% for real datasets of various dimensions%
+		}
+		\label{fig:dim_time}
+	\end{subfigure}\begin{subfigure}[b]{0.5\textwidth}
+	\includegraphics[width=1\textwidth]{img-perf/dim/datasetacc.pdf} 
+	\caption{Recall and Precision %for real datasets of various dimensions%
+	}
+	\label{fig:dim_acc}
+\end{subfigure}%
+\caption{Real datasets of various dimensions}
+\label{fig:dim_real}
+\end{figure*} 
+
+\begin{figure*}[ht]
+	\centering
+	\begin{subfigure}[b]{0.5\textwidth}
+		\includegraphics[width=1\textwidth]{img-perf/dim/randtime.pdf} 
+		\caption{Execution time% for real datasets of various dimensions%
+		}
+		\label{fig:rand_time}
+	\end{subfigure}\begin{subfigure}[b]{0.5\textwidth}
+	
+	\includegraphics[width=1\textwidth]{img-perf/dim/randacc.pdf} 
+	\caption{Recall and Precision}
+	\label{fig:rand_acc}
+\end{subfigure}%
+\caption{Generated datasets of various dimensions}
+\label{fig:dim_rand}
+\end{figure*} 
+
+
+Since \HBNLJ~relies on the dot product, it is not dataset dependent and its execution time increases
+with the dimension as seen on Figures \ref{fig:dim_time} and \ref{fig:rand_time}. 
+
+\VO~is heavily dependent on data distribution and on the choice of pivots to build clusters of 
+equivalent size which improves parallelism. The comparison of execution times for the datasets 
+\emph{128-sift} and \emph{281-blog} in Figure \ref{fig:dim_time} shows that, although the dimension
+of data increases, the execution time is greatly reduced. Nonetheless, the clustering phase of the algorithm performs a 
+lot of dot product operations which makes it dependent on the dimension, as can be seen in Figure \ref{fig:rand_time}. 
+
+\Z~is an algorithm that depends on spatial dimension. Very efficient for low dimension, its 
+execution time increases with the dimension (Figure \ref{fig:rand_time}). A closer 
+analysis shows that all phases see their execution time increase. However, the overall time is 
+dominated by the first phase (generation of shifted copies and partitioning) whose time complexity
+sharply increases with dimension. Data distribution has 
+an impact on the recall which gets much lower than the precision for some datasets (Figure~\ref{fig:dim_acc}).
+With generated dataset (Figure~\ref{fig:rand_acc}), both recall and precision are identical and initially very high. 
+However as dimension increases, the recall decreases because of the projection. 
+
+Finally, \LSH~is both dependent on the dimension and distribution of data. Experiments with the real datasets have 
+proved to be difficult because of the various parameters of the algorithm to obtain the requested number of 
+neighbors without dramatically increasing the execution time (see discussion in Section~\ref{rankreduceanalysis}). 
+Despite our efforts, the precision was very low for some datasets, in particular \emph{28-higgs}. 
+Using the generated datasets, we see that its execution time increases with the dimension (Figure~\ref{fig:rand_time}) 
+but its recall remains stable (Figure~\ref{fig:rand_acc}). 
+
+\subsection{Practical Analysis}
+In this section, we analyze the algorithms from a practical point of view, outlying their sensitivity to 
+the dataset, the environment or some internal parameters.   
+\subsubsection{H-BkNNJ}
+%HBKNNJ
+The main drawback of \HBK~is that only the Map phase is in parallel. In addition, the optimal parallelization 
+is subtle to achieve because the optimal number of nodes to use is defined by  
+$\frac{input\,size}{input\,split\,size}$. This algorithm is clearly not suitable for large datasets but because of its 
+simplicity, it can, nonetheless, be used when the amount of data is small.  
+
+\subsubsection{H-BNLJ}
+In \HBNLJ, both the Map and Reduce phases are in parallel, but the optimal number of tasks is difficult to 
+find. Given a number of partitions $n$, there will be $n^2$ tasks. Intuitively, one would choose a number of 
+tasks that is a multiple of the number of processing 
+units. The issue with this strategy is that the distribution of the partitions might be unbalanced.
+Figure~\ref{fig:lb_hbnlj}
+shows an experiment with $6$ partitions and $6^2=36$ tasks, each executed on a reducer. Some reducers will have more elements to process than others, 
+slowing the computation.
+\begin{figure}[!h]
+\centering
+   \includegraphics[width=0.4\textwidth]{img-perf/perso/loadbalancing/hbnlj.pdf}
+   \caption{H-BNLJ, candidates job, $10^{5}$ records \label{fig:lb_hbnlj}, 6 partitions, Geo dataset}
+\end{figure}%
+
+Overall, the challenge with this algorithm is to find the optimal number of partitions for a given dataset. 
+
+\subsubsection{PGBJ} 
+A difficulty in \VO~comes from its sampling-based preprocessing techniques because it 
+impacts the partitioning and thus the load balancing. This raises many challenges. First, how to choose
+the pivots from the initial dataset. The three techniques proposed by the authors, farthest, k-means and 
+random, lead to different pivots and different partitions and possibly different executions. We found that 
+with  our datasets, both k-means and random techniques
+gave the best performance. Second, the number of pivots is also important because
+it will impact the number of partitions. A too small or too large number of pivots 
+will decrease performance. Finally, another important parameter is the grouping strategy used 
+(Section~\ref{pgbj_grouping}).
+\begin{figure}[!h]
+   \includegraphics[width=0.5\textwidth]{img-perf/perso/pgbj/strategy.pdf} 
+   \caption{PGBJ, overall time (lines) and Grouping time (bars)\label{fig:pgbj_strategy} with Geo dataset, 3000 pivots, 
+   KMeans Sampling}         
+\end{figure}
+In Figure~\ref{fig:pgbj_strategy}, we can see that the greedy grouping technique has a higher grouping time 
+(bars) than the geo grouping technique. 
+However, the global computing time (line) using this technique is shorter thanks to the good load balancing. This
+is illustrated by Figure~\ref{fig:pgbj_balancing} which shows the distribution of elements processed
+by reducers when using geo grouping (\ref{fig:geo_20r}) or greedy grouping (\ref{fig:greedy_20r}).
+                  
+\begin{figure}[h]
+\centering
+		\begin{subfigure}[b]{0.25\textwidth}
+                \includegraphics[width=\textwidth]{img-perf/perso/pgbj/geo_20r_400.pdf}
+                \caption{Geo\label{fig:geo_20r}}
+                
+        \end{subfigure}%
+        \begin{subfigure}[b]{0.25\textwidth}
+                \includegraphics[width=\textwidth]{img-perf/perso/pgbj/greedy_20r_400.pdf}
+                \caption{Greedy\label{fig:greedy_20r}}
+                
+        \end{subfigure}%
+        \caption{PGBJ, load balancing \label{fig:pgbj_balancing} with 20 reducers}
+\end{figure}                
+ 
+\subsubsection{H-zkNNJ}\label{z-value}
+In \Z, the $z$-value transformation leads to information loss. The recall of this algorithm is influenced
+by  the nature, the dimension and the size of the input data.
+More specifically, this algorithm becomes biased if the distance between initial data is very scattered, and 
+the more input data or the higher the dimension, the more difficult it is to draw the space filling curve. To 
+improve the recall, the authors propose to create duplicates in the original dataset by shifting data. 
+This greatly increases the amount of data to process and has a significant impact on the execution time.
+
+\begin{table*}[ht]
+ 	\begin{center}\renewcommand{\arraystretch}{1.2}
+ 		\begin{tabular}{|c|c|c|c|}
+ 			\hline
+ 			\textbf{Algorithm}  & \textbf{Advantage}  &  \textbf{Shortcoming}   & \textbf{Typical Usecase} \\
+ 			 \hline
+ 			\textbf{H-BkNNJ} 	& 
+ 				\begin{tabular}[c]{@{}c@{}}
+ 					Trivial to implement  
+ 				\end{tabular} & 
+ 				\begin{tabular}[c]{@{}c@{}}
+ 					1. Breaks very quickly \\ 
+ 					2. Optimal parallelism difficult\\ 
+ 					to achieve a priori
+ 				\end{tabular} &
+ 				\begin{tabular}[c]{@{}c@{}}
+ 			    	Any tiny and low dimension dataset\\
+ 			    	($\sim$ 25000 records)
+ 			    \end{tabular} \\ \hline
+ 			\textbf{H-BNLJ}     &
+ 				\begin{tabular}[c]{@{}c@{}}
+ 				 	Easy to implement
+ 				\end{tabular} & 
+ 				\begin{tabular}[c]{@{}c@{}}
+ 				 	1. Slow\\
+ 				 	2. Very large communication overhead 
+ 				\end{tabular} & 
+ 				\begin{tabular}[c]{@{}c@{}}
+ 				 	Any small/medium dataset\\
+ 				 	($\sim$ 100000 records)
+ 				\end{tabular} \\ \hline
+ 			\textbf{PGBJ}       & 
+	 			\begin{tabular}[c]{@{}c@{}}
+ 				   	1. Exact solution\\ 
+ 				   	2. Lowest disk usage\\ 
+ 			       	3. No impact on communication\\
+ 			       	overhead with the increase of $k$
+	 			\end{tabular}        & 
+	 			\begin{tabular}[c]{@{}c@{}}
+	 				1. Cannot finish in reasonable time\\ 
+	 				for large dataset\\ 
+	 				2. Poor performance for high\\
+	 				dimension data\\
+	 				3. Large communication overhead\\
+	 				4. Performance highly depends on\\ 
+	 				the quality of a priori chosen pivots
+	 			\end{tabular} & 
+ 				\begin{tabular}[c]{@{}c@{}}
+ 					1. Medium/large dataset for\\
+ 					low/medium dimension\\
+ 					2. Exact results
+ 				\end{tabular} \\ \hline
+ 			\textbf{H-zkNNJ}    &
+	 			\begin{tabular}[c]{@{}c@{}}
+	 			    1. Fast\\ 
+	 			    2. Does not require a priori parameter\\ 
+	 			    tuning \\ 
+	 			    3. More precise for large k \\ 
+	 			    4. Always give the right number of $k$	 	
+	 	        \end{tabular} & 
+	 	        \begin{tabular}[c]{@{}c@{}}
+	 	        	1. High disk usage\\ 
+	 	        	2. Slow for large dimension \\ 
+	 	        	3. Very high space requirement ratio \\ 
+	 	        	for small values of $k$
+ 				\end{tabular} & 
+ 				\begin{tabular}[c]{@{}c@{}}
+ 					1. Large dataset of small dimension\\
+ 					2. High values of $k$\\
+ 			        3. Approximate results
+ 				\end{tabular} \\ \hline
+ 			\textbf{RankReduce} & 
+ 			\begin{tabular}[c]{@{}c@{}}
+ 				1. Fast\\ 
+ 				2. Low footprint on disk usage
+ 			\end{tabular} & 
+ 			\begin{tabular}[c]{@{}c@{}}
+ 				1. Fine parameter tuning required with\\ 
+ 				experimental set up \\
+ 				2. Multiple hash functions needed for\\
+ 				acceptable recall \\
+ 				3. Different quality metrics to consider\\
+ 				(recall + precision)
+ 		   \end{tabular}                                           
+ 			& \begin{tabular}[c]{@{}c@{}}
+ 				1. Large dataset of any dimension \\
+ 				2. Approximate results \\
+ 				3. Room for parameter tuning
+ 			\end{tabular} \\ \hline
+ 		\end{tabular}
+ 		\caption{Summary table for each algorithm in practice}\label{summary_practice}  
+ 	\end{center}
+ \end{table*}
+
+\subsubsection{RankReduce}\label{rankreduceanalysis}
+\LSH, with the addition of a third job, can have the best performance of all, provided that it is started with the 
+optimal parameters.
+The most important ones are $W$, the size of each bucket, $L$, the number of hash families and $M$, the number 
+of hash functions in each family. Since they are dependent on the dataset, experiments are 
+needed to precisely tune them. In \cite{Dong:2008:MLP:1458082.1458172_full}, the authors suggests this can be achieved 
+with a sample dataset and a theoretical model. 
+The first important metric to consider is the number of candidates available in each bucket. Indeed, with some 
+poorly chosen parameter values, it is possible to have less than $k$ elements in each bucket, making it impossible to 
+have enough elements at the end of the computation (there are less than $k$ neighbors in the result). On the opposite, 
+having too many candidates in each bucket will increase too much the execution time. 
+To illustrate the complexity of the parameter tuning operation, we have run experiments on the Geo and SURF datasets. 
+First, Figure~\ref{fig:lsh_tunning_geo} shows that, for the Geo dataset, increasing $W$ improves the recall and the 
+precision at the expense of the execution time, up to an optimal before decreasing. This can be explained by looking
+at the number of buckets for a given $W$. As $W$ increases, each bucket contains more elements and thus their number 
+decreases. As a consequence, the probability to have the correct $k$ neighbors inside a bucket increases, which 
+improves the recall. However, the computational load of each bucket also increases.
+
+ 
+\begin{figure}[!h]
+ \centering
+          \includegraphics[width=0.5\textwidth]{img-perf/perso/lsh/params_geo_time.pdf} 
+         \caption{LSH tuning, Geo dataset, 40k records,  20 nodes}
+                \label{fig:lsh_tunning_geo}
+\end{figure}
+\begin{figure}[!h]
+         \centering
+       % \begin{subfigure}[b]{0.25\textwidth}
+                 \includegraphics[width=0.5\textwidth]{img-perf/perso/lsh/params_surf.pdf} 
+                %\caption{lsh tunning surf}
+        %\end{subfigure}
+         \caption{LSH tuning, SURF dataset, 40k records, 20 nodes}\label{fig:lsh_tunning_surf}
+\end{figure}
+
+A similar pattern can be observed with the SURF dataset (Figure~\ref{fig:lsh_tunning_surf}, left), where 
+increasing $W$ improves the recall (from 5\% to 35\%) and the precision (from 22\% to 35\%). Increasing 
+the number of families $L$ greatly improves both the precision and recall. However, increasing $M$, the
+number of hash functions, decreases the number of collisions, reducing execution time but also the recall and 
+precision. Overall, finding the optimal parameters for the LSH part is complex and has to be done for every dataset
+
+After finishing all the experiments, we found that the execution time of all algorithms mostly follows the 
+theoretical analysis presented in Section~\ref{sec:analysis}. However, as expected, the computationally intensive
+part, which could not be expressed analytically, has proved to be very sensitive to a lot of different factors.
+The dataset itself, through its dimension and the data distribution, but also the parameters of some of the 
+pre-processing steps. The magnitude of this sensitivity and its impact on metrics such as recall and precision
+could not have been inferred without thorough experiments. 
+
+
+\subsection{Lessons Learned}
+
+The first aspect is related to load balance. \HBNLJ~actually cannot guarantee load balancing, because of the random 
+method it uses to split data. For \VO, Greedy grouping gives a better load balance than Geo grouping, at 
+the cost of an increased duration of the grouping phase. At 
+the same time, our experiments also confirm that \Z~and \LSH, which use size based 
+partitioning strategies, have a very good load balance, with a very small deviation of the completion time of each 
+task. %\TODO{3s out of how long? we need to put a \% ---done}
+
+Regarding disk usage, generally speaking, \VO~has the lowest disk space requirement, while \Z~has the largest for small
+$k$ values. However, for large $k$, the space requirement of all algorithms becomes similar. 
+%\TODO{better word, comparable en francais}.
+
+The communication overhead of \VO~is very sensitive to the choice of pivots. 
+
+The data are another important aspect affecting the performance of the algorithms. As expected, all the 
+algorithms' performance decreases as the dimension of data increases. However, what exceeded the prediction of the 
+theoretical analysis is that the dimension is really a curse for \VO~. Because of the cost of computing distances in 
+the pre-processing phase, its performance becomes really poor, sometimes worse than \HBNLJ. \Z~also suffers from the 
+dimension, which decreases its recall. However, the major impact comes from the distribution of data. 
+
+In addition, the overall performance is also sensitive to some specific parameters, especially for \LSH. Its 
+performance depends a lot on some parameter tuning, which requires extensive experiments.
+
+Based on the experimental results, we summarize the advantages, disadvantages and suitable usage scenarios for each 
+algorithm, in Table~\ref{summary_practice}.
+
+
+ 

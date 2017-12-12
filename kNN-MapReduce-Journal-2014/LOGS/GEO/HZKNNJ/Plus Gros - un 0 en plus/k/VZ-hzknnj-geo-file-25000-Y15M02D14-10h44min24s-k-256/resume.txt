@@ -1,0 +1,179 @@
+TIMETOTAL=9748185
+TIME_HUMAIN=2h42min28sec
+KNN=256
+inputLineS=2500000
+inputLineR=2500000
+outputRes=639518976
+outputWanted=640000000
+ratioRes=0
+JOB1=88699;5000000;666997;9994088;666997;0
+
+
+
+
+
+---------------------------------------------* Counter Group: FileSystemCounters (FileSystemCounters)
+  number of counters in this group: 4
+  - FILE_BYTES_READ: FILE_BYTES_READ: 9626221
+  - FILE_BYTES_WRITTEN: FILE_BYTES_WRITTEN: 21622743
+  - HDFS_BYTES_READ: HDFS_BYTES_READ: 750920082
+  - HDFS_BYTES_WRITTEN: HDFS_BYTES_WRITTEN: 713067729
+* Counter Group: fr.inria.hadoop.common.mapreduce.AbstractMapPhase1$MyCounterLineInput (fr.inria.hadoop.common.mapreduce.AbstractMapPhase1$MyCounterLineInput)
+  number of counters in this group: 3
+  - CounterLineR: CounterLineR: 2500000
+  - CounterLineS: CounterLineS: 2500000
+  - Total: Total: 3072
+* Counter Group: Job Counters  (org.apache.hadoop.mapred.JobInProgress$Counter)
+  number of counters in this group: 7
+  - Total time spent by all maps waiting after reserving slots (ms): FALLOW_SLOTS_MILLIS_MAPS: 0
+  - Total time spent by all reduces waiting after reserving slots (ms): FALLOW_SLOTS_MILLIS_REDUCES: 0
+  - Rack-local map tasks: RACK_LOCAL_MAPS: 12
+  - SLOTS_MILLIS_MAPS: SLOTS_MILLIS_MAPS: 421791
+  - SLOTS_MILLIS_REDUCES: SLOTS_MILLIS_REDUCES: 852412
+  - Launched map tasks: TOTAL_LAUNCHED_MAPS: 12
+  - Launched reduce tasks: TOTAL_LAUNCHED_REDUCES: 74
+* Counter Group: Map-Reduce Framework (org.apache.hadoop.mapred.Task$Counter)
+  number of counters in this group: 16
+  - Combine input records: COMBINE_INPUT_RECORDS: 0
+  - Combine output records: COMBINE_OUTPUT_RECORDS: 0
+  - Total committed heap usage (bytes): COMMITTED_HEAP_BYTES: 13916700672
+  - CPU time spent (ms): CPU_MILLISECONDS: 411120
+  - Map input records: MAP_INPUT_RECORDS: 5000000
+  - Map output bytes: MAP_OUTPUT_BYTES: 44381593
+  - Map output materialized bytes: MAP_OUTPUT_MATERIALIZED_BYTES: 9994088
+  - Map output records: MAP_OUTPUT_RECORDS: 666997
+  - Physical memory (bytes) snapshot: PHYSICAL_MEMORY_BYTES: 15281799168
+  - Reduce input groups: REDUCE_INPUT_GROUPS: 3
+  - Reduce input records: REDUCE_INPUT_RECORDS: 666997
+  - Reduce output records: REDUCE_OUTPUT_RECORDS: 0
+  - Reduce shuffle bytes: REDUCE_SHUFFLE_BYTES: 9113483
+  - Spilled Records: SPILLED_RECORDS: 1333994
+  - SPLIT_RAW_BYTES: SPLIT_RAW_BYTES: 1680
+  - Virtual memory (bytes) snapshot: VIRTUAL_MEMORY_BYTES: 335596683264
+* Counter Group: File Input Format Counters  (org.apache.hadoop.mapreduce.lib.input.FileInputFormat$Counter)
+  number of counters in this group: 1
+  - Bytes Read: BYTES_READ: 750918402
+* Counter Group: File Output Format Counters  (org.apache.hadoop.mapreduce.lib.output.FileOutputFormat$Counter)
+  number of counters in this group: 1
+  - Bytes Written: BYTES_WRITTEN: 0
+---------------------------------------------
+
+
+
+
+
+
+JOB2=3598134;15000000;15032755;167872075;15032755;1920066048
+
+
+
+
+
+---------------------------------------------* Counter Group: FileSystemCounters (FileSystemCounters)
+  number of counters in this group: 4
+  - FILE_BYTES_READ: FILE_BYTES_READ: 323109753
+  - FILE_BYTES_WRITTEN: FILE_BYTES_WRITTEN: 482470644
+  - HDFS_BYTES_READ: HDFS_BYTES_READ: 713068173
+  - HDFS_BYTES_WRITTEN: HDFS_BYTES_WRITTEN: 3308690301
+* Counter Group: fr.inria.hadoop.hzknnj.BPhase2$Reduce$CPT_ELMTS (fr.inria.hadoop.hzknnj.BPhase2$Reduce$CPT_ELMTS)
+  number of counters in this group: 2
+  - CPT_R: CPT_R: 7500258
+  - CPT_S: CPT_S: 7532497
+* Counter Group: Job Counters  (org.apache.hadoop.mapred.JobInProgress$Counter)
+  number of counters in this group: 8
+  - Data-local map tasks: DATA_LOCAL_MAPS: 2
+  - Total time spent by all maps waiting after reserving slots (ms): FALLOW_SLOTS_MILLIS_MAPS: 0
+  - Total time spent by all reduces waiting after reserving slots (ms): FALLOW_SLOTS_MILLIS_REDUCES: 0
+  - Rack-local map tasks: RACK_LOCAL_MAPS: 38
+  - SLOTS_MILLIS_MAPS: SLOTS_MILLIS_MAPS: 1748779
+  - SLOTS_MILLIS_REDUCES: SLOTS_MILLIS_REDUCES: 66927590
+  - Launched map tasks: TOTAL_LAUNCHED_MAPS: 40
+  - Launched reduce tasks: TOTAL_LAUNCHED_REDUCES: 60
+* Counter Group: Map-Reduce Framework (org.apache.hadoop.mapred.Task$Counter)
+  number of counters in this group: 16
+  - Combine input records: COMBINE_INPUT_RECORDS: 0
+  - Combine output records: COMBINE_OUTPUT_RECORDS: 0
+  - Total committed heap usage (bytes): COMMITTED_HEAP_BYTES: 105514532864
+  - CPU time spent (ms): CPU_MILLISECONDS: 67841530
+  - Map input records: MAP_INPUT_RECORDS: 15000000
+  - Map output bytes: MAP_OUTPUT_BYTES: 1000242429
+  - Map output materialized bytes: MAP_OUTPUT_MATERIALIZED_BYTES: 167872075
+  - Map output records: MAP_OUTPUT_RECORDS: 15032755
+  - Physical memory (bytes) snapshot: PHYSICAL_MEMORY_BYTES: 121631789056
+  - Reduce input groups: REDUCE_INPUT_GROUPS: 60
+  - Reduce input records: REDUCE_INPUT_RECORDS: 15032755
+  - Reduce output records: REDUCE_OUTPUT_RECORDS: 1920066048
+  - Reduce shuffle bytes: REDUCE_SHUFFLE_BYTES: 156113759
+  - Spilled Records: SPILLED_RECORDS: 45098265
+  - SPLIT_RAW_BYTES: SPLIT_RAW_BYTES: 5724
+  - Virtual memory (bytes) snapshot: VIRTUAL_MEMORY_BYTES: 474297810944
+* Counter Group: File Input Format Counters  (org.apache.hadoop.mapreduce.lib.input.FileInputFormat$Counter)
+  number of counters in this group: 1
+  - Bytes Read: BYTES_READ: 713062449
+* Counter Group: File Output Format Counters  (org.apache.hadoop.mapreduce.lib.output.FileOutputFormat$Counter)
+  number of counters in this group: 1
+  - Bytes Written: BYTES_WRITTEN: 3308690301
+---------------------------------------------
+
+
+
+
+
+
+JOB3=6061352;1920066048;1920066048;7168627563;1917845248;639518976
+
+
+
+
+
+---------------------------------------------* Counter Group: FileSystemCounters (FileSystemCounters)
+  number of counters in this group: 4
+  - FILE_BYTES_READ: FILE_BYTES_READ: 20728556532
+  - FILE_BYTES_WRITTEN: FILE_BYTES_WRITTEN: 26640464860
+  - HDFS_BYTES_READ: HDFS_BYTES_READ: 3308699421
+  - HDFS_BYTES_WRITTEN: HDFS_BYTES_WRITTEN: 15839690123
+* Counter Group: Job Counters  (org.apache.hadoop.mapred.JobInProgress$Counter)
+  number of counters in this group: 8
+  - Data-local map tasks: DATA_LOCAL_MAPS: 3
+  - Total time spent by all maps waiting after reserving slots (ms): FALLOW_SLOTS_MILLIS_MAPS: 0
+  - Total time spent by all reduces waiting after reserving slots (ms): FALLOW_SLOTS_MILLIS_REDUCES: 0
+  - Rack-local map tasks: RACK_LOCAL_MAPS: 57
+  - SLOTS_MILLIS_MAPS: SLOTS_MILLIS_MAPS: 84346756
+  - SLOTS_MILLIS_REDUCES: SLOTS_MILLIS_REDUCES: 90831634
+  - Launched map tasks: TOTAL_LAUNCHED_MAPS: 60
+  - Launched reduce tasks: TOTAL_LAUNCHED_REDUCES: 60
+* Counter Group: Map-Reduce Framework (org.apache.hadoop.mapred.Task$Counter)
+  number of counters in this group: 16
+  - Combine input records: COMBINE_INPUT_RECORDS: 3839192481
+  - Combine output records: COMBINE_OUTPUT_RECORDS: 3836971681
+  - Total committed heap usage (bytes): COMMITTED_HEAP_BYTES: 133885853696
+  - CPU time spent (ms): CPU_MILLISECONDS: 123241010
+  - Map input records: MAP_INPUT_RECORDS: 1920066048
+  - Map output bytes: MAP_OUTPUT_BYTES: 44827098193
+  - Map output materialized bytes: MAP_OUTPUT_MATERIALIZED_BYTES: 7168627563
+  - Map output records: MAP_OUTPUT_RECORDS: 1920066048
+  - Physical memory (bytes) snapshot: PHYSICAL_MEMORY_BYTES: 156377640960
+  - Reduce input groups: REDUCE_INPUT_GROUPS: 2498121
+  - Reduce input records: REDUCE_INPUT_RECORDS: 1917845248
+  - Reduce output records: REDUCE_OUTPUT_RECORDS: 639518976
+  - Reduce shuffle bytes: REDUCE_SHUFFLE_BYTES: 7056959549
+  - Spilled Records: SPILLED_RECORDS: 7992771194
+  - SPLIT_RAW_BYTES: SPLIT_RAW_BYTES: 9120
+  - Virtual memory (bytes) snapshot: VIRTUAL_MEMORY_BYTES: 573601902592
+* Counter Group: File Input Format Counters  (org.apache.hadoop.mapreduce.lib.input.FileInputFormat$Counter)
+  number of counters in this group: 1
+  - Bytes Read: BYTES_READ: 3308690301
+* Counter Group: File Output Format Counters  (org.apache.hadoop.mapreduce.lib.output.FileOutputFormat$Counter)
+  number of counters in this group: 1
+  - Bytes Written: BYTES_WRITTEN: 0
+---------------------------------------------
+
+
+
+
+
+
+------------------------------------------------------
+TIMETOTAL;ratioRes;TIME_HUMAIN;
+9748185;0;2h42min28sec;
+------------------------------------------------------

@@ -1,0 +1,15 @@
+\section{Experimental Evaluation}
+
+To validate our analysis, we performed an experimental evaluation of the algorithms we have described in the previous sections. %We left out H-BkNNJ as it could not execute in reasonable time. 
+%most advanced algorithms. Indeed, the H-BkNNJ could not compete with the other algorithms and complete in reasonable time. Similarly, we stopped experimenting H-BNLJ quite quickly for the same reasons.
+We computed the 20 nearest neighbors (20-NN) of a two dimension geographical dataset on a 20 nodes Hadoop Cluster (dual core with 8 GB of RAM). For each implemented 
+algorithm, we first determined experimentally the optimal parameters (shown in Figure) and show only the best results measured. 
+Figure~\ref{experiment}-left shows the completion time of H-BNLJ, RankReduce, PGBJ and 
+H-zkNNJ, for dataset $R$ and $S$ that both went from $0.5 \times 10^5$ to $16 \times 10^5$ records ($R$ = $S$ at each step). 
+H-BkNNJ could not be executed in reasonable time for big dataset.
+The execution time of H-BNLJ increases exponentially, making it impracticable for the dataset which contains more than $2 \times 10^5$ records. The 
+three other algorithms compete fairly up to the biggest dataset considered, but 
+PGBJ is much slower than the other two. This is expected since it gives an exact result whereas RankReduce and H-zkNNJ are only approximate. Nevertheless, PGBJ greatly improves over the exact algorithm H-BNLJ. Overall, RankReduce and H-zkNNJ are the fastest algorithms to find the approximate nearest neighbors in MapReduce. 
+We also studied their accuracy as shown in Figure~\ref{experiment}-right.
+For small dataset, they both have a good accuracy (97\% for RankReduce vs 93\% for  H-zkNNJ). However, as the dataset grows, the accuracy of H-zkNNJ decreases to 86\%. Because when the dataset grows, the deviation of the estimation will become bigger. But for LSH, when the density of data becomes larger, the chance that the neighbor data being sent to one bucket will increase, that's the reason the accuracy of LSH becomes better when the number of data increases.
+This highlights the trade-off between fastness and accuracy for approximate methods.

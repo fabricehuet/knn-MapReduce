@@ -1,0 +1,107 @@
+\begin{table*}[htp]
+\centering %
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+
+\hline
+\multirow{4}{*}{\centering{ \bf Methods}}                                            & \multirow{4}{*}{\centering{\textbf{Preprocessing}}}                                & 
+\multirow{4}{*}{\centering{\textbf{Partitioning}}}                                   &
+\multirow{4}{*}{\centering{\textbf{Accuracy}}} & \multicolumn{4}{c|}{\textbf{Complexity}}                                                                                \\ \cline{5-8} 
+                                                                              &                                                                           &                                                                            &                                    & \textbf{Jobs} & \textbf{Tasks}   & \textbf{}%
+\begin{tabular}{@{}c@{}}
+\textbf{Intermediate}\tabularnewline
+\textbf{Candidate }\tabularnewline
+\textbf{(per $r_{i}$)}\tabularnewline
+\end{tabular}  & \textbf{}%
+\begin{tabular}{@{}c@{}}
+\textbf{Final}\tabularnewline
+\textbf{Candidate }\tabularnewline
+\textbf{(per $r_{i}$)}\tabularnewline
+\end{tabular}  & \multicolumn{1}{c|}{\textbf{Communication}}\tabularnewline
+\hline 
+\begin{tabular}{@{}c@{}}
+\textbf{H-BkNNJ}\tabularnewline
+(Basic Method)\tabularnewline
+\end{tabular} & None  & None  & Exact  & 1  & 1  & \multicolumn{2}{c|}{$|S|$} & $\mathcal{O}(\left|R\right|+\left|S\right|)$ \tabularnewline
+\hline 
+\begin{tabular}{@{}c@{}}
+\textbf{H-BNLJ} \cite{Zhang:2012:EPK:2247596.2247602} \tabularnewline
+(Zhang et al.)\tabularnewline
+\end{tabular} & None  & None  & Exact  & 2  & $n^{2}$  & \textbf{}%
+\begin{tabular}{@{}c}
+$|S|$ /n\tabularnewline
+{\footnotesize if good balancing}
+\tabularnewline
+\end{tabular} & $nk$  & %
+\begin{tabular}{@{}c@{}}
+$\mathcal{O}(n\left|R\right|$ \tabularnewline
+$+n\left|S\right|+kn\left|R\right|)$ \tabularnewline
+\end{tabular}\tabularnewline
+\hline 
+\begin{tabular}{@{}c@{}}
+\textbf{PGBJ} \cite{Lu:2012:EPK:2336664.2336674}\tabularnewline
+(Lu et al.)\tabularnewline
+\end{tabular} & %
+\begin{tabular}{@{}c@{}}
+Pivots\tabularnewline
+Selection\tabularnewline
+\end{tabular} & %
+\begin{tabular}{@{}c@{}}
+Distance \tabularnewline
+Based\tabularnewline
+(Voronoi \tabularnewline
+Diagram)\tabularnewline
+\end{tabular} & Exact  & 3  & n  & \multicolumn{2}{c|}{\textbf{}%
+\begin{tabular}{@{}c@{}}
+$|S_{i}|$ \tabularnewline
+{\footnotesize \#element in grouping}\tabularnewline
+{\footnotesize equals to the sum of element S of }\tabularnewline
+{\footnotesize cells inside the group + the replicas of S}\tabularnewline
+\end{tabular}} & %
+\begin{tabular}{@{}c@{}}
+$\mathcal{O}(\left|R\right|$ \tabularnewline
+$+\left|S\right|+\left|RepS_{c}\right|\cdot n)$ \tabularnewline
+\end{tabular}\tabularnewline
+\hline 
+\begin{tabular}{@{}c@{}}
+\textbf{RankReduce} \cite{Stupar10rankreduce-}\tabularnewline
+(Stupar et al.)\tabularnewline
+\end{tabular} & LSH  & Size Based  & Approximate  & 3  & n  & \textbf{}%
+\begin{tabular}{@{}c@{}}
+$|S_{i}|$ \tabularnewline
+{\footnotesize \#element of S in bucket $i$}\tabularnewline
+{\footnotesize its size depends to W}\tabularnewline
+\end{tabular} & %
+\begin{tabular}{@{}c@{}}
+$L\cdot k$ \tabularnewline
+\end{tabular} & %
+\begin{tabular}{@{}c@{}}
+$\mathcal{O}(L\cdot(|R|+|S|)$ \tabularnewline
+$+L\cdot k\cdot|R|)$ \tabularnewline
+\end{tabular}\tabularnewline
+\hline 
+\begin{tabular}{@{}c@{}}
+\textbf{H-zkNNJ} \cite{Zhang:2012:EPK:2247596.2247602}\tabularnewline
+(Zhang et al.)\tabularnewline
+\end{tabular} & %
+\begin{tabular}{@{}c@{}}
+Z-Value\tabularnewline
+(Space Filling\tabularnewline
+Curve)\tabularnewline
+\end{tabular} & Size Based  & Approximate  & 3  & n  & \textbf{}%
+\begin{tabular}{@{}c@{}}
+$2\cdot k$\tabularnewline
+{\footnotesize thanks to the Binary Sort}\tabularnewline
+{\footnotesize of space filling curve}
+
+\end{tabular} & %
+\begin{tabular}{@{}c@{}}
+$\alpha\cdot k$\tabularnewline
+\end{tabular} & 
+\begin{tabular}{@{}c@{}} 
+$\mathcal{O}(\alpha(\frac{1}{\varepsilon^{2}}$ \tabularnewline
+$+\left|S\right|+k\cdot\left|R\right|))$  
+\end{tabular}
+\tabularnewline
+\hline 
+\end{tabular}\caption{Summary table of kNN computing systems with MapReduce\label{summary_table_new} }
+\end{table*}

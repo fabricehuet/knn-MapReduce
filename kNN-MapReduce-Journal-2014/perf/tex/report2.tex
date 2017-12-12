@@ -1,0 +1,53 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{geometry}
+
+\geometry{hmargin=2.5cm,vmargin=1.cm}
+\begin{document}
+\section{Benchmark entre algo}
+
+ \begin{figure}[ht]
+ \centering
+ 	  \begin{subfigure}[b]{0.3\textwidth}
+                 \includegraphics[width=\textwidth]{../graph/geo/nodes.png} 
+                \caption{nodes}
+        \end{subfigure}%
+        \begin{subfigure}[b]{0.3\textwidth}
+                 \includegraphics[width=\textwidth]{../graph/geo/K.png} 
+                \caption{K}
+        \end{subfigure}%
+        \begin{subfigure}[b]{0.3\textwidth}
+                 \includegraphics[width=\textwidth]{../graph/geo/time.png} 
+                \caption{time}
+        \end{subfigure}%
+        \caption{low dimension}
+  \end{figure}
+  
+  \begin{figure}[ht]
+ \centering
+ 	  \begin{subfigure}[b]{0.3\textwidth}
+                 \includegraphics[width=\textwidth]{../graph/surf/nodes.png} 
+                \caption{nodes}
+        \end{subfigure}%
+        \begin{subfigure}[b]{0.3\textwidth}
+                 \includegraphics[width=\textwidth]{../graph/surf/K.png} 
+                \caption{K}
+        \end{subfigure}%
+        \begin{subfigure}[b]{0.3\textwidth}
+                 \includegraphics[width=\textwidth]{../graph/surf/time.png} 
+                \caption{time}
+        \end{subfigure}%
+        \caption{hight dimension}
+  \end{figure}
+  
+   \newpage
+
+\end{document}

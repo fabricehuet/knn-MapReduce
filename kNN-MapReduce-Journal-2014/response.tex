@@ -1,0 +1,515 @@
+\documentclass[11pt]{letter}
+
+\usepackage{times,,xspace,amsmath,amssymb,color}
+\usepackage[english]{babel}
+\usepackage[normalem]{ulem}
+\parindent=0cm
+\parskip=0.28cm
+\setlength{\textwidth}{17cm}
+\setlength{\oddsidemargin}{-0.24cm}
+\setlength{\evensidemargin}{-0.24cm}
+\setlength{\topmargin}{0cm}
+\setlength{\headheight}{0cm}
+\setlength{\textheight}{24cm}
+\setlength{\headsep}{0cm}
+\newcommand{\eat}[1]{}
+\date{}
+
+\newcommand{\sstab}{\rule{0pt}{8pt}\\[-3.4ex]}
+\newcommand{\stab}{\rule{0pt}{8pt}\\[-2.4ex]}
+\newcommand{\vs}{\vspace{1ex}}
+\newcommand{\svs}{\vspace{0.36ex}}
+\newcommand{\kw}[1]{{\ensuremath {\mathsf{#1}}}\xspace}
+\newcommand{\dist}{\kw{dist}}
+\newcommand{\pred}{\kw{pred}}
+\newcommand{\desc}{\kw{desc}}
+\newcommand{\pSim}{\kw{Match}}
+\newcommand{\at}[1]{\protect\ensuremath{\mathsf{#1}}\xspace}
+
+\newcommand{\NP}{\kw{NP}}
+\newcommand{\DAGs}{{\sc dag}s\xspace}
+\newcommand{\NC}{\kw{NC}\xspace}
+\newcommand{\coNP}{co\kw{NP}\xspace}
+\newcommand{\PTIME}{\kw{PTIME}}
+\newcommand{\PSPACE}{\kw{PSPACE}}
+\newcommand{\EXPTIME}{\kw{EXPTIME}\xspace}
+\newcommand{\NPSPACE}{\kw{NPSPACE}\xspace}
+
+
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand{\im}{\item}
+\newenvironment{tbi}{\begin{itemize}
+        \setlength{\topsep}{1.5ex}\setlength{\itemsep}{0ex}\vspace{-0.5ex}}
+        {\end{itemize}\vspace{-0.5ex}}
+\newenvironment{tbe}{\begin{enumerate}
+        \setlength{\topsep}{0ex}\setlength{\itemsep}{-0.7ex}\vspace{-1ex}}
+        {\end{itemize}\vspace{-1ex}}
+
+\newcommand{\eps}{\prec}
+\newcommand{\deps}{\prec_{D}}
+\newcommand{\leps}{\prec_L}
+\newcommand{\dleps}{\prec_{D}^{L}}
+\newcommand{\iso}{\lhd}
+\newcommand{\bieps}{\sim}
+\newcommand{\embed}{\lessdot}
+\newcommand{\neps}{\ntrianglelefteq}
+\newcommand{\ees}{\preceq_{(e,e)}}
+\newcommand{\nees}{\not\preceq_{e,e}}
+\newcommand{\Reps}{S}
+\newcommand{\bcp}{{\sc bcp}\xspace}
+\newcommand{\ie}{\emph{i.e.,}\xspace}
+\newcommand{\eg}{\emph{e.g.,}\xspace}
+\newcommand{\wrt}{\emph{w.r.t.}\xspace}
+\newcommand{\aka}{\emph{a.k.a.}\xspace}
+\newcommand{\kwlog}{\emph{w.l.o.g.}\xspace}
+
+
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\newcommand{\added}[1]{\textcolor{blue}{#1}}
+\newcommand{\changed}[1]{\textcolor{red}{#1}}
+\newcommand{\removed}[1]{\textcolor{gray}{#1}}
+
+\newcommand{\ball}[1]{\hat{G}[#1]}
+\newcommand{\amazon}{\kw{Amazon}}
+\newcommand{\Amazon}{\kw{Amazon}}
+\newcommand{\youtube}{\kw{YouTube}}
+\newcommand{\YouTube}{\kw{YouTube}}
+
+
+\newcommand{\match}{\kw{Match}}
+\newcommand{\optmatch}{\kw{Match^+}}
+\newcommand{\dismatch}{\kw{dMatch}}
+\newcommand{\optdismatch}{\kw{dMatch^+}}
+\newcommand{\minq}{\kw{minQ}}
+\newcommand{\graphsim}{\kw{Sim}}
+%\newcommand{\subiso}{\kw{SubIso}}
+%\newcommand{\dissubiso}{\kw{dSubIso}}
+\newcommand{\metis}{{\sc Metis}\xspace}
+\newcommand{\vf}{\kw{VF2}}
+\newcommand{\tale}{\kw{TALE}}
+\newcommand{\mcs}{\kw{MCS}}
+\newcommand{\dsim}{\kw{dSim}}
+\newcommand{\dissubiso}{\kw{dVF2}}
+\newcommand{\dvf}{\kw{dVF2}}
+
+\newcommand{\stitle}[1]{\vspace{0.5ex} \noindent{\bf #1}}
+\newcommand{\etitle}[1]{\vspace{1ex}\noindent{\underline{\em #1}}}
+
+\newcommand{\TODO}[1]{\textcolor{red}{\textbf{[TODO:#1]}}}
+\newcommand{\TODOREP}[1]{\textcolor{green}{\textbf{[TODO:#1]}}}
+
+
+
+
+\begin{document}
+
+
+
+\noindent
+Prof. Jian Pei,\\
+Editor-in-Chief,\\
+IEEE Transactions on Knowledge and Data Engineering
+
+\vspace{0.3cm}
+\noindent
+Dear Prof. Pei,
+
+
+Attached please find a revised version of our submission to IEEE Transactions on Knowledge and Data Engineering,
+{\em K Nearest Neighbour Joins for Big Data on MapReduce: a Theoretical and Experimental Analysis}.
+
+Thank you for your constructive comments on our manuscript. The paper has been substantially revised according to the 
+referees' comments. Before addressing them more precisely, we would like to address the general comments. 
+
+\begin{itemize}
+%
+\item[(1)] Depth of the empirical and theoretical analysis: 
+
+We added a theoretical analysis about the load balance for RankReduce in Section 4.1. 
+
+We extended the theoretical analysis of complexity of each methods in Section 4.3, and added the analysis of 
+communication overhead, explaining better how the three factors  (jobs, tasks and candidates) affect the performance. 
+
+Except for the first benchmark where we compute the adequate number of nodes, we re-ran all the benchmarks to have the 
+communication overhead metric in the experiments, with a corresponding analysis added in Section 5.1.3 and in Section 
+5.2.3. 
+
+We added the recall and precision metrics for the approximate methods (H-zkNNJ and RankReduce), and discuss them 
+through Section 5.
+%
+\item[(2)]  Some important methods have not been included in the analysis: 
+
+We cited two papers suggested by the reviewers, one as a related work [21], the other one as a possible local 
+improvement for all methods. However, regarding other mentioned papers, for example the discussion about the accuracy 
+of $z$-value and LSH methods, we think that they are out of the scope of this survey. 
+
+We added the missing discussion suggested by the reviewers about theoretical complexity, recall and precision. 
+
+Finally, we added a discussion about some open issues and future work.
+
+%
+\item[(3)] Presentation of the work and results:
+
+We extended our introduction with possible applications and challenges.
+
+We added a description for each figure describing a method, in order to help the readers to get a general idea
+of their principles. 
+
+We re-organized and extended the discussion in Section 4 with more details in order to relate better the theoretical 
+analysis and experimental evaluation.
+
+We re-wrote the description of the different setup for the experiments to make it more readable and easier to reproduce.
+
+We changed legend symbols for the figures to make them consistent.
+
+\end{itemize}
+
+
+
+We will now address the specific comments of each referee. 
+
+%%%%%%%%%%%%%%%%%%%%%
+\vspace{3.6ex}
+\hrule
+\vspace{0.6ex}
+
+\vspace{2ex} \stitle{Response to the comments of Referee 1}.
+
+{\em
+{\bf [R1C1]} section 2.1, definition 3 for aknn(r,S), "where $s^k$ is the exact kth nearest neighbor of r in S." Here, 
+$s^{k*}$ should be the exact kth nearest neighbor of r in S. this typo also appeared in its conference version, which 
+should be corrected in this journal version.}\\
+%\svs
+\textbf{[Response]} Thanks. We have corrected this and put a footnote for the erratum to be applied in the conference 
+version.
+
+
+\svs
+\noindent
+{\em
+{\bf [R1C2]}  section 3.2.1, in paper[27], the upper bound of the partition is computed with respect to any r $\in$ 
+$R_i$ ( $R_i$ is a cell of R) instead of the pivot of the cell $R_i$. Therefore, the author may need to address their 
+statement correspondingly.}\\
+%\svs
+\textbf{[Response]}
+This has been fixed, thank you.
+
+\svs
+\noindent
+{\em
+{\bf [R1C3]}  section 3.2, the authors give a few of figures for various method without further explain the figure in 
+detail. I'll suggest the authors walk through the figures and help the readers to get a clear idea of each method.}\\
+\textbf{[Response]}
+For a more comprehensive description, we have updated the three figures picturing the three partitioning strategies in Sections 3.2.1 and 3.2.2. We added a detailed explanation for each of them after they are cited in those Sections. Thanks for this suggestion.
+
+\svs
+\noindent
+{\em
+{\bf [R1C4]}  section 5, a detailed dataset setup is missing. To make the experiments more readable and easy to repeat 
+by the others, I suggest the authors to add a dataset setup section.}\\
+\textbf{[Response]}
+%To clarify the dataset setup, we have added a detailed paragraph about the type, the %dimension and the size of the data for each dataset at the beginning of section 5.
+%A array dataset setup was added at the beginning of section 5. \TODO{Re-write sentence}
+We re-wrote and re-organized the setup part of the experiments in the introduction of Section 5. The datasets used for 
+the experiments are much more detailed. Also, we specify  the metrics that are going to be evaluated and we 
+expand their formal and informal definitions.
+Then, for each experimental subsection, we give the exact parameters used in the experiments.
+
+\svs
+\noindent
+{\em
+{\bf [R1C5]}  Starting from Fig 10, the legend symbol for various method are different from Fig 6 to Fig9 which may 
+confuse the reader. I'll suggest the authors to use consistent notation across the paper.}\\
+\textbf{[Response]}
+The figures are now consistent. Moreover, some figures have been improved to achieve better readability. 
+
+\svs
+\vspace{2.8ex}
+\hrule
+\vspace{0.6ex}
+{\bf Response to the comments of Referee 2.}
+
+\noindent
+{\em
+{\bf [R2.W1]}
+The paper tends to deliver a survey type paper, however, there are some related
+methods that it does not consider.
+For example,
+
+{\small [1] Qinsheng Du and Xiongfei Li, “A novel knn join algorithms based on hilbert r-tree in mapreduce,” in Computer Science and Network Technology (ICCSNT), 2013 3rd International Conference on, Oct 2013, pp. 417– 420.
+
+[2]  Changqing Ji, Tingting Dong, Yu Li, Yanming Shen, Keqiu Li, Wenming Qiu, Wenyu Qu, and Minyi Guo, “Inverted grid-based knn query processing with mapreduce,” in Seventh ChinaGrid Annual Conference, ChinaGrid 2012, Beijing, China, September 20-23, 2012, 2012, pp. 25–32.}
+}
+\svs
+
+\textbf{[Response]}
+We have cited Paper [1] in section 3.3.2 as a technique, aside the 
+classical R-Tree technique, in order to index locally the data of each block. This is indeed a possible local 
+improvement. We did not go into much details though because the focus of this paper is on distributed techniques.
+Also, we cited Paper [2] as a possible distance-based partitioning method and an alternative to the presented 
+distance-based partitioning with Voronoi diagram. However, we did not implement it because of its close resemblance 
+to the Voronoi diagram  technique for two dimensional data.
+
+%\TODOREP{Je suis pas du tout d'accord avec cette reponse !!!!! RankReduce c'est pour les queries et ont l'a mentionné !!!}
+%Paper [2] talks about kNN \textbf{Query}, here we want to clarify two notions. kNN \textbf{Query} is a process who wants to find  the k nearest neighbours of one query point, where kNN \textbf{Join} intends to find the k nearest neighbours of a set of query points (please refer to Definition 1 and 2 in our paper). These are two different processes, with different processing steps required. For example, kNN query does not need any partition for dataset R (because there is no such a dataset), where kNN join needs to partition both R and S. Our paper only talks about kNN join. And in our opinion, it is not very worthwhile doing kNN query with MapReduce, because this process requires to launch a MapReduce job for only one query point r. Since MapReduce is an offline processing platform with an overhead for initiation and launching, it will be more efficient to do a kNN join on MapReduce. So, in order not to confuse the readers, we prefer not to include this reference into the method part of our paper. However, the Inverted Grid Index method proposed in paper [2] is very interesting, we would like to cite this paper in the section 2.3 as a related work. Thanks for the suggestion.
+
+%Indeed, our paper has talked about every step for processing a kNN join on MapReduce. For the index method, we have mentioned $B^+$-Tree, R-Tree, M-Tree, Sphere-Tree, quad-Tree and KD-Tree etc. For the projection method, we have talked about LSH and space filling curve, where for space filling curve we focused on Z-Value. Of course there should exist other index method, such as the one proposed by Paper [2], and other space filling curves like the one used in Paper [1], and we are sorry about what we have missed.
+%
+%\TODO{For the first paper, we will add it in the related work because it is still possible to perform a reduction to dimension 2 and perform this algorithm.
+%For the second paper, only query, not a join, so not the same, close to voronoi, cite in voronoi part}
+
+%\TODO{Justine: pourquoi vouloir parler d'autres papiers ici ?}
+%
+%\TODOREP{D'autre papier 
+%http://arxiv.org/pdf/1402.7063.pdf
+%}
+%
+%\TODOREP{$http://www.db.ss.is.nagoya-u.ac.jp/~dbgroup/public_papers/2012-waim-long.pdf$}
+
+\svs
+\noindent
+{\em
+{\bf [R2.W2]}
+The main problem of the paper is lack of significance.}\\
+\textbf{[Response]} The kNN problem receives a lot of attention in the database community, so we think it is worthwhile 
+to compare kNN techniques and discuss which one is adapted (or not) to which case. 
+
+To the best of our knowledge, no published paper has ever compared the surveyed methods all together:\\
+1) Both theoretically and experimentally\\
+2) In the same environment with the same hardware and settings\\
+3) On the same sets of data\\
+To make the reader aware of those challenges, we have added the aforementioned arguments in the introduction of the paper (Section 1), that we have modified in this sense.
+Indeed, by just comparing the published paper at a glance, one cannot conclude on which method performs the best. 
+Published experiments cannot be compared because they use different dataset (type, size, dimension, distribution), 
+ and different parameters of each underlying technique.   
+Only by performing these experiments were we able to give insight on how well an algorithm that was tailored for a 
+particular use case work in general. We believe this is an invaluable feedback. 
+
+For all those reasons, we think that this paper has a high relevance and we will do our best to correct the problems 
+that remain in order to make the community benefit from our analysis.
+
+\svs
+\noindent
+{\em
+{\bf [R2.W3]}
+The authors attempt to present theoretical analysis but it could not give
+a very clear and complete results. For example, the load balance analysis for
+RankReduce algorithm is missing, and there are no direct theoretical
+conclusions for approximate algorithms in the Accuracy subsection at all.}\\
+\textbf{[Response]} In this revision we have put a lot of effort in making the theoretical analysis section (Section 4) 
+more complete and informative. We have added one paragraph in Section 4.1 (last paragraph) to discuss the load 
+balance of RankReduce. We have also added elements of discussion for approximate algorithms in 
+Section 4.2 in order to give the readers a general direction. However, as the accuracy depends on many external 
+factors, such as data distribution, no general conclusion can be established.
+
+Please check the next answer for the complementary changes in the theoretical analysis section (Section 4).
+%We have added one paragraph in section 4.1 to discuss about the load balance for RankReduce, sorry about the missing.  For the accuracy,  actually, in real condition, it depends on many factors, for example the data skew, which is not predictable. And there are a lot of papers talking about the accuracy of z-value and LSH, with a lot of proves and formulas, we think this is not the purpose of our paper.  But we have also enriched the discussion about the accuracy of the approximate algorithms in section 4.2, to give the readers a general sense about the accuracy. Please check them and thanks for these suggestions.
+%
+%\TODO{To add uncommented part. Check in papers zvalue and lsh if theoretical accuracy exists. SOPHIE}
+
+
+\vs
+\noindent
+{\em
+{\bf [R2.W4]}
+The authors propose some additional performance factors such as the
+number of MapReduce jobs, the number of Map/Reduce tasks,
+and the number of distances to compute and to sort, however, how can
+these factors affect the performance is not clearly presented in the experimental results.}\\
+\textbf{[Response]} 
+Section 4.3 has been extensively reworked. The theoretical analysis of the communication overhead and the computation 
+overhead are not simple combination of the three mentioned factors, this is why it is difficult to relate them. In 
+Section 4.3, we have added more discussion on the communication overhead of the algorithms. In particular, precise 
+complexity are given in the text and summarized in Table~1. We have added a complexity of the final 
+candidates found by the algorithms. In the text, we infer some conclusion from the candidate set complexity, 
+which, we think, gives a insight on overall computation. Now, the paper exposes clearly 
+which algorithms are expected to be efficient, given the complexity analysis. This motivates the  
+experimental evaluation section (Section 5).
+
+% For example, the overhead for initializing a MapReduce job is a constant, but this constant will vary for different clusters. And also, the total overhead is not the sum of these two overheads. 
+%The spacial nature of the problem is that in real application the performance depends a lot on some factors that the theoretical analysis can not give, like the type of data. We have added some discussions about how these factors affect the performance.
+%I think our experimental results already react the theoretical analysis. And besides, it also gives us more information in the practical point of view, which complements the lack of the theory. That's why we need to have both theoretical and experimental parts doesn't it?
+
+%
+%\TODO{Récupérer le nombre de pivots, en déduire le nombre de tâches, et conclure. Algorithms with only one MapReduce job do not scale - explain this in the experiments. Explain that a single MapReduce job cannot scale because the shuffle phase requires having everything in memory. Second, explain how the number of tasks affect the performance in the experiment: add an experiment with the number of tasks H-BNNJ. Number of distances: complex analysis - link it with the number of tasks but there is also a link with the replication factor that is done. Partie 4.3 : voir experimentalement comment ça se traduit. Rajouter 5.3 bis : impact of the number of tasks of the number of buckets...}
+
+%\TODOREP{ en fait le papier parle des challenges qu on mentionne dans section 4.3 l'analyse et dit qu'on a pas mis en avant dans  les experiences ! 1) the number of MapReduce jobs ex : Vo = 2 MAP reduce job + 1 preprocessing compare aux 2 MR de block nest loop on voit une nette amelioration . Toutefois les 3 MR tel que zvalue ou lsh permettenr de decoupze les data en les repartitiant mieux dans l'espace et d'avoir des petits job qui sont en fin de compte pour des grosses données plus realisable. Les versions 3 MR sont cependant utiles pour des grosses données voir time geo ou voronoi etant de mm tranche de valeur va devenir, a partir de $4* 10^{5}$, exponenttielle.}
+%\\
+%\TODOREP{2) the number of Map/Reduce tasks => pour le load balancing on veut le 
+%$\#node+ epsilon$ aux cas ou . Pour hbnlj j'ai les perfs faut il ajouter ? 
+%}
+%\TODOREP{3) the number of distances to compute and to sort
+%c logique }
+
+
+\svs
+\noindent
+{\em
+{\bf [R2.W5]}
+This paper also does not present very important performance metrics
+such as communication overhead and recalls for approximate solutions.}\\
+\textbf{[Response]}
+We took in consideration the two pointed out metrics and re-ran all benchmarks. 
+
+In particular, we computed the communication overhead of all the algorithms for the Geo and SURF datasets (Sections 5.1 
+and 5.2) taking into account the variation of the input records and the variation of $k$. The results can be found on 
+Figure 8 (Geo dataset) and Figure 11 (Surf dataset). We added an analysis of the communication overhead respectively in 
+Section 5.1.3 and Section 5.2.3.
+
+We also worked on the recall metric. In the submitted version, what we called accuracy was in fact the recall metric 
+you mentioned, given by the formula: $\wp = \frac{\mid A(v) \bigcap I(v) \mid}{\mid  I(v) \mid}$. We updated 
+accordingly the paper wherever this misnaming appeared.
+We have also added the precision metric (introduction of Section~5). All these metrics are presented in Figure~6c, 
+Figure~7c, Figure~9c, and Figure~10c, Figure~12b and Figure~13b and thoroughly discussed. 
+%We noted, in the text where Figure 6c is cited (page 10, last paragraph of 5.1.1), that for H-zkNNJ, precision and 
+%recall are the same, because H-zkNNJ always returns $k$ elements, which is not the case for RankReduce. The difference 
+%between recall and precision can be observed for RankReduce on the Geo dataset (Figure 6c and 7c) and on the real 
+%datasets (Figure 12b), but not on the other figures where the two metrics are the same (those information are also put 
+%in the text where the figures are cited).
+
+% What we didn't mention is the precision, because for H-zkNNJ and most of the time of RankReduce, the precision is the same as recall (as the number of results desired and obtained is always k). But as you mentioned it here, we have improved our text to clearly explain the difference between recall and precision, and also why they are always overlapping.
+%\TODO{END}
+
+
+\svs
+\noindent
+{\em
+{\bf [R2.W6]}
+The high-dimensional datasets for experiments are rather small, thus the
+experimental conclusions are less convincing for BIG data.}\\
+\textbf{[Response]} We agree that the size of all considered datasets is rather small. We actually did not expect that 
+the runtime for all algorithms would be so high, even on modest datasets. Nevertheless, with the considered datasets, 
+the algorithms are already strained enough to draw 
+informative conclusions. We don't see much point in pushing further the size of the datasets because we clearly see on 
+the figures when an algorithm reaches its peak performance. Also, it might be worth noticing that we went up to data in 
+dimension 386, which is larger than any published experiment we are aware of.
+
+%However, if the PC judges that the term is not appropriate here, we will agree to remove it from the title.
+
+%
+%In terms of computing time,  we are always around one hour computing, and wait more than 2 hours in the worst case.
+
+%\textbf{[Response]}\TODO{Written by Sophie - not checked}
+%The highest dimensional dataset we have tried is in 386 dimensions. To the best of our knowledge, no published paper has ever tried this problem with higher dimensional dataset. And for high-dimensional datasets, we may easily meet the ``curse of dimensionality". We didn't try bigger dataset, because the exact methods will die soon after we increase the size of dataset,  then we have nothing to compare with. And already with not that big dataset, we have discovered some interesting information, and that's enough.
+%\TODO{END}
+
+%\TODO{My opinion --Sophie}
+%Here I prefer not to present the data on MB or GB, because (1) nobody has done like this, they all present the size of data on records number. (2) this reviewer only said that the "high-dimensional datasets" are small, she doesn't mention the other data set, and we can explain why the high-dimensional dataset is small ---- because of the curse of dimensionality, but if we add the size of data on MB for all our dataset, she will realize that our other datasets might be small too.
+%\TODO{END}
+
+%\TODO{Already with small dataset some of the algorithms explode, there is no point in going further in those cases. Some of them are non linear (RankReduce). This remark would apply only to the algorithms that show a linear behavior. Furthermore, nobody that we are aware of used such high dimensional data with a large dataset.}
+
+\svs
+\noindent
+{\em
+{\bf [R2.W7]}
+The experimental figures could be further improved and should be more consistent.}\\
+\textbf{[Response]} The figures are more consistent now. Moreover, some figures have been improved to achieve higher quality.
+%Thank you for this notice. Indeed, we improve the figure
+%\begin{itemize}
+%\item the legend are more consistend : for example figure 10 and 11 have the same color that the figure 5, 6, 8 and 9
+%\item the benchmark of data size has the same format, ie all are described by a multiplication $10^5$ instead of one on $10^4$ and the other on $10^5$
+%\item the figure are more visible, we keep in yticks just 4-5 metrics, the font is biggest
+%\item the figure 17 is updated. We remove the legend of ylabel inside them and the courb are more consistent. We set a courb for the time ect...
+
+
+%\end{itemize}
+
+\vspace{2.8ex}
+\hrule
+\vspace{0.6ex}
+{\bf Response to the comments of Referee 3.}
+
+\svs
+\noindent
+{\em
+{\bf [R3C1]}
+ I see that the authors mentioned challenges in k-NN in the introduction section. Can they put more challenges in k-NN 
+ and make a small subsection. It may help readers to see.}\\
+\textbf{[Response]}
+The introduction has been reworked to make clearer the challenges in kNN as early as possible in the paper. More 
+precisely, we expose the complexity of the naive solution to understand the benefits of  more advanced algorithms.
+
+\svs
+\noindent
+{\em
+{\bf [R3C2]}
+Also, one application of k-NN can be described in detail, and all the other applications can be summarized in the same 
+subsection. By following the points 1 and 2, the introduction part will look more efficient and readable.}\\
+\textbf{[Response]}
+We have added possible fields of application in the second paragraph of the introduction together with the associated 
+references. After that, we have explained a more precise kNN application that consist in finding similar images using 
+feature descriptors (data in dimension 128 -- later called SURF data in the paper), which we use later in the 
+experimental evaluation. In addition, this justifies the analysis of kNN for data in high dimensions.
+ 
+\svs
+\noindent
+{\em
+{\bf [R3C3]}
+ The authors reviewed and classified the paper in a well manner. However, what are the problems of the papers? This 
+ point is missing in all the reviewed papers. If they can add 2-3 lines about the problems for each paper, it will be 
+ good. For example, one approach is described at lines 14-23 on page 4 without any disadvantages/problems in that.}\\
+\textbf{[Response]}
+In the surveyed papers some aspects were missing in the expriments. We have pointed out  those issues for RankReduce 
+and PGB in Section~3.1
+We also completed the comments for each method in the experimental evaluation section. In particular, the conclusion 
+for PGBJ has been updated in Section 5.4.3, the one for H-zkNNJ has been updated in Section~5.4.4, and the one for 
+RankReduce in Section~5.4.5.
+
+%\TODO{JUSTINE - DONE Rajouter dans summary les désavantages des papiers (ce qui est attendu et des soucis qui pourraient apparaître aussi en expérimentant + problèmes détaillés dans les parties d'avant)}
+
+\svs
+\noindent
+{\em
+{\bf [R3C4]}
+ In Section 4.3, the authors may also consider the replication cost and its impact on the data transfer between the map 
+ and the reduce phase.}\\
+\textbf{[Response]}
+We have completely reworked Section 4 to have a better complexity analysis. In particular, the second part of Section 4.3 takes a particular interest in the communication overhead. We did not expand there the replication cost because it would be difficult to compare it between surveyed methods (no point of comparison) and thus would not been relevant here. However the replication cost is intrinsically taken into account in the communication overhead analysis, since replicated data are also present in the shuffle phase. 
+
+%\TODO{Here the replication means the number of replication in Hadoop, or the replication in each partition? 
+%We added a discussion about the communication overhead, which implies that having less replications will decrease the communication overhead among methods. But, actually, we can not compare how the replication cost impact the communication overhead for each method, because the replication number will not change for each method. --by Sophie
+%}
+
+%\TODO{Sophie, il faudrait insister sur ca dans la section 4.3. Regarde note}
+
+\svs
+\noindent
+{\em
+{\bf [R3C5]}
+ It may be good to write a tradeoff between one round and multi-rounds MapReduce-based k-NN finding.}\\
+\textbf{[Response]}
+We have enriched our discussion in the beginning of Section 4.3, discussing more about balancing the number of jobs and 
+tasks, and how the three factors can affect the performance.
+
+
+%\TODO{Traité dans R2.W4}
+
+\svs
+\noindent
+{\em
+{\bf [R3C6]}
+ The authors are wrapping each section in a nice manner. But, I am unable to see any open issue. I would like that the 
+ authors provide some open issues and future directions in the field with a nice description or a small subsection 
+ about it.}\\
+\textbf{[Response]} 
+We have added open issues and future directions in the conclusion.
+Basically, the biggest general open issue is the inability to efficiently treat data in high dimensions. This is the 
+case for all the algorithms, but for different reasons: exact algorithms take too much time whereas approximate 
+solutions exhibit a poor precision.
+Also, the replication is inherent to all methods and has a substantial cost, as seen in the experiment. Reducing the 
+replication cost at minimum constitutes a possible future direction. Finally, the case of dynamic $R$ is not addressed
+in the existing solutions.
+%\TODO{Reecrire le vert de la conclusion}
+
+\vspace{3.6ex}
+\hrule
+\vspace{3.6ex}
+\closing{Your sincerely,}
+
+\vspace{-8ex}
+Ge Song, Justine Rochas, Lea El Beze, Fabrice Huet, Fr\'ed\'eric Magoul\`es
+\end{document}

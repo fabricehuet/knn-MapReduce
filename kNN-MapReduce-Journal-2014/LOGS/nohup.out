@@ -1,0 +1,14 @@
+Killed by signal 15.
+Write failed: Broken pipe
+Write failed: Broken pipe
+lost connection
+./PGBJ/data/sophia-GREEDY--file-2000-dim_2-k_20-Y15M02D18-02h53min11s/nphase2out/part-r-00012: No such file or directory
+./PGBJ/data/sophia-GREEDY--file-2000-dim_2-k_20-Y15M02D18-02h53min11s/nphase2out/part-r-00015: No such file or directory
+./PGBJ/data/sophia-GREEDY--file-2000-dim_2-k_20-Y15M02D18-02h53min11s/nphase2out/_logs: No such file or directory
+./PGBJ/data/sophia-GREEDY--file-2000-dim_2-k_20-Y15M02D18-02h53min11s/nphase2out/part-r-00008: No such file or directory
+./PGBJ/data/sophia-GREEDY--file-2000-dim_2-k_20-Y15M02D18-02h53min11s/nphase2out/part-r-00004: No such file or directory
+./PGBJ/data/sophia-GREEDY--file-2000-dim_2-k_20-Y15M02D18-02h53min11s/resume.txt: No such file or directory
+./PGBJ/data/sophia-GREEDY--file-2000-dim_2-k_20-Y15M02D18-02h53min11s/nphase1out: No such file or directory
+./PGBJ/data/sophia-GREEDY--file-1000-dim_2-k_20-Y15M02D18-02h48min43s: No such file or directory
+./PGBJ/datageo: No such file or directory
+./PGBJ/k: No such file or directory
